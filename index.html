@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <title>Q&A GAME</title>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="clock">
+            <p id="minute"></p>
+            <p>:</p>
+            <p id="second"></p>
+        </div>
+        <div id="question">
+            Are u ok?
+        </div>
+        <div id="answer">
+            <input>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="js/clock.js"></script>
+    <script>
+        const newClock = new ClockAndQA({
+            clockContainer: document.getElementById("clock"),
+            minuteElement: document.getElementById("minute"),
+            secondElement: document.getElementById("second"),
+            question: document.getElementById("question"),
+            answer: document.getElementById("answer") 
+        })
+    </script>
+</body>
+</html>

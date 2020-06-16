@@ -1,0 +1,27 @@
+#clock {
+    padding: 50px;
+
+    border-radius: 10px;
+
+    border: 2px solod #FF0000;
+
+    color: #FF0000;
+
+    display: flex;
+
+    cursor: pointer;
+}
+
+#clock p {
+    font-size: 120px;
+    padding: 0 5px;
+}
+
+#question {
+    font-size: 50px;
+    padding: 20px;
+}
+
+#answer input{
+    font-size: 40px;
+}
