@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <title>Q&A GAME</title>
 </head>
+
 <body>
     <div id="wrapper">
         <div id="clock">
@@ -79,12 +81,14 @@
 
             const circleAnswer = document.createElement("I");
             circleAnswer.className = "far fa-circle"
+            circleAnswer.setAttribute("key", questionSample.listAnswer[i].key)
+            circleAnswer.addEventListener('click', function (event) {
+                console.log(this.getAttribute("key"))
+            })
             node.appendChild(circleAnswer)
 
             const textnode = document.createTextNode(questionSample.listAnswer[i].content); // Create a text node
             node.appendChild(textnode); // Append the text to <li>
-
-            
 
             answerWrapper.appendChild(node);
         }
@@ -92,4 +96,5 @@
         document.getElementById("answer").appendChild(answerWrapper)
     </script>
 </body>
+
 </html>
