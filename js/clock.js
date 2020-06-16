@@ -7,8 +7,6 @@ class ClockAndQA {
         this.question = params.question;
         this.answer = params.answer;
 
-        this.listQuestion = ["Are u ok?", "U good?", "OK?", "How is the weather?", "How old are you?"];
-
         this.valueMinute = 0;
         this.valueSecond = 0;
         this.isCounting = false;
@@ -17,12 +15,14 @@ class ClockAndQA {
         this.setUpEvent();
     }
 
+    resultList = [];
+
     questionBundle = [{
             type: `multiple`,
             question: `1 + 1 = ?`,
             //for multiple choice
             correctAnswer: `a`,
-            listAnswer: [{
+            answerList: [{
                     key: `a`,
                     content: `10`,
                 },
@@ -46,7 +46,7 @@ class ClockAndQA {
             question: `a + b = ?`,
             //for multiple choice
             correctAnswer: `a`,
-            listAnswer: [{
+            answerList: [{
                     key: `a`,
                     content: `ab`,
                 },
@@ -61,14 +61,14 @@ class ClockAndQA {
             ],
             timeLimit: 16 // seconds
         },
-        {
-            type: `text`,
-            question: `Chuột nào đi bằng 2 chân?`,
-            //for multiple choice
-            correctAnswer: `mickey`,
-            listAnswer: [],
-            timeLimit: 16 // seconds
-        }
+        // {
+        //     type: `text`,
+        //     question: `Chuột nào đi bằng 2 chân?`,
+        //     //for multiple choice
+        //     correctAnswer: `mickey`,
+        //     answerList: [],
+        //     timeLimit: 16 // seconds
+        // }
     ]
 
     startCounting() {
@@ -116,38 +116,57 @@ class ClockAndQA {
     chooseRandomQuestion(listQuestions) {
         const randomNum = Math.random() * 1000;
 
-        return index = Math.floor(randomNum % listQuestions.length);
+        this.indexQuestion = Math.floor(randomNum % listQuestions.length);
+    }
+
+    handleClickAnswer(key){
+
+
+        setAnswerIsClick()
+    }
+
+    setAnswerIsClick(){
+
     }
 
     generateMultipleAnswer(questionSample) {
-        //add tag lu
-        this.answer.innerHTML = `<lu></lu>`
-        //add tag li
-
         const answerWrapper = document.createElement("UL");
 
-        for (let i = 0; i < questionSample.listAnswer.length; i++) {
+        for (let i = 0; i < questionSample.answerList.length; i++) {
+
             const node = document.createElement("LI"); // Create a <li> node
-            const textnode = document.createTextNode(questionSample.listAnswer[i].content); // Create a text node
-            node.appendChild(textnode); // Append the text to <li>
 
             const circleAnswer = document.createElement("I");
             circleAnswer.className = "far fa-circle"
+            circleAnswer.setAttribute("key", questionSample.answerList[i].key)
+            circleAnswer.addEventListener('click', function () {
+                handleClickAnswer(this.getAttribute("key"))
+                //setAnswerIsClick(this.getAttribute("key"))
+            })
             node.appendChild(circleAnswer)
+
+            const textnode = document.createTextNode(questionSample.answerList[i].content); // Create a text node
+            node.appendChild(textnode); // Append the text to <li>
 
             answerWrapper.appendChild(node);
         }
+
+        this.answer.appendChild(answerWrapper)
     }
 
-    generateQuestion(questionBundle) {
-        const index = chooseRandomQuestion(questionBundle)
+    generateQuestion(questionBundle, index) {
+        console.log("generate question")
+
+        //const index = this.chooseRandomQuestion(questionBundle)
+
+        //this.chooseRandomQuestion(questionBundle)
 
         this.question.innerHTML = questionBundle[index].question
 
         if (questionBundle[index].type === `multiple`)
-            generateMultipleAnswer(questionBundle[index])
+            this.generateMultipleAnswer(questionBundle[index])
         else
-            generateTextAnswer(questionBundle[index])
+            this.generateTextAnswer(questionBundle[index])
     }
 
     setUpEvent() {
@@ -159,7 +178,7 @@ class ClockAndQA {
                 this.switchCounting();
                 this.timer = this.startCounting();
                 this.setVisibilityQA();
-                this.question.innerHTML = this.chooseRandomQuestion(this.listQuestion);
+                this.generateQuestion(this.questionBundle, this.indexQuestion = 0)
             }
         })
 
