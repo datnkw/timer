@@ -17,6 +17,60 @@ class ClockAndQA {
         this.setUpEvent();
     }
 
+    questionBundle = [{
+            type: `multiple`,
+            question: `1 + 1 = ?`,
+            //for multiple choice
+            correctAnswer: `a`,
+            listAnswer: [{
+                    key: `a`,
+                    content: `10`,
+                },
+                {
+                    key: `b`,
+                    content: `1`,
+                },
+                {
+                    key: `c`,
+                    content: `3`,
+                },
+                {
+                    key: `d`,
+                    content: `2`,
+                }
+            ],
+            timeLimit: 16 // seconds
+        },
+        {
+            type: `multiple`,
+            question: `a + b = ?`,
+            //for multiple choice
+            correctAnswer: `a`,
+            listAnswer: [{
+                    key: `a`,
+                    content: `ab`,
+                },
+                {
+                    key: `b`,
+                    content: `ba`,
+                },
+                {
+                    key: `c`,
+                    content: `aa`,
+                }
+            ],
+            timeLimit: 16 // seconds
+        },
+        {
+            type: `text`,
+            question: `Chuột nào đi bằng 2 chân?`,
+            //for multiple choice
+            correctAnswer: `mickey`,
+            listAnswer: [],
+            timeLimit: 16 // seconds
+        }
+    ]
+
     startCounting() {
         return setInterval(() => {
             this.handleTimeIncrement();
@@ -27,8 +81,8 @@ class ClockAndQA {
         return clearInterval(savedInterval);
     }
 
-    normalizeTime(number){
-        return number < 10 ? ('0'+ number) : number;
+    normalizeTime(number) {
+        return number < 10 ? ('0' + number) : number;
     }
 
     displayTime(minute, second) {
@@ -45,7 +99,6 @@ class ClockAndQA {
         this.displayTime(this.valueMinute, this.valueSecond)
     }
 
-
     setVisibilityQA() {
         if (!this.isCounting) {
             this.question.style.display = "none";
@@ -60,12 +113,41 @@ class ClockAndQA {
         this.isCounting = !this.isCounting;
     }
 
-    chooseRandomQuestion() {
-        const randomNum = Math.random()* 1000;
+    chooseRandomQuestion(listQuestions) {
+        const randomNum = Math.random() * 1000;
 
-        const index = Math.floor(randomNum%this.listQuestion.length);
+        return index = Math.floor(randomNum % listQuestions.length);
+    }
 
-        return this.listQuestion[index];
+    generateMultipleAnswer(questionSample) {
+        //add tag lu
+        this.answer.innerHTML = `<lu></lu>`
+        //add tag li
+
+        const answerWrapper = document.createElement("UL");
+
+        for (let i = 0; i < questionSample.listAnswer.length; i++) {
+            const node = document.createElement("LI"); // Create a <li> node
+            const textnode = document.createTextNode(questionSample.listAnswer[i].content); // Create a text node
+            node.appendChild(textnode); // Append the text to <li>
+
+            const circleAnswer = document.createElement("I");
+            circleAnswer.className = "far fa-circle"
+            node.appendChild(circleAnswer)
+
+            answerWrapper.appendChild(node);
+        }
+    }
+
+    generateQuestion(questionBundle) {
+        const index = chooseRandomQuestion(questionBundle)
+
+        this.question.innerHTML = questionBundle[index].question
+
+        if (questionBundle[index].type === `multiple`)
+            generateMultipleAnswer(questionBundle[index])
+        else
+            generateTextAnswer(questionBundle[index])
     }
 
     setUpEvent() {
@@ -77,7 +159,7 @@ class ClockAndQA {
                 this.switchCounting();
                 this.timer = this.startCounting();
                 this.setVisibilityQA();
-                this.question.innerHTML = this.chooseRandomQuestion();
+                this.question.innerHTML = this.chooseRandomQuestion(this.listQuestion);
             }
         })
 

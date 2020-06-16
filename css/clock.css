@@ -25,3 +25,16 @@
 #answer input{
     font-size: 40px;
 }
+
+#answer ul {
+    list-style-type:none;
+}
+
+#answer li {
+    margin: 10px;
+}
+
+#answer li i {
+    cursor: pointer;
+    margin: 5px;
+}

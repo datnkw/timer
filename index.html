@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/fec4219172.js"></script>
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <title>Q&A GAME</title>
 </head>
@@ -17,19 +18,78 @@
             Are u ok?
         </div>
         <div id="answer">
-            <input>
+            <!-- <input> -->
+            <!-- <ul>
+                <li>
+                    <i class="far fa-circle"></i>
+                    abc
+                </li>
+                <li>
+                    <i class="far fa-circle"></i>
+                    edf
+                </li>
+                <li>
+                    <i class="far fa-circle"></i>
+                    xyz
+                </li>
+            </ul> -->
         </div>
     </div>
 
     <script type="text/javascript" src="js/clock.js"></script>
     <script>
-        const newClock = new ClockAndQA({
-            clockContainer: document.getElementById("clock"),
-            minuteElement: document.getElementById("minute"),
-            secondElement: document.getElementById("second"),
-            question: document.getElementById("question"),
-            answer: document.getElementById("answer") 
-        })
+        // const newClock = new ClockAndQA({
+        //     clockContainer: document.getElementById("clock"),
+        //     minuteElement: document.getElementById("minute"),
+        //     secondElement: document.getElementById("second"),
+        //     question: document.getElementById("question"),
+        //     answer: document.getElementById("answer") 
+        // })
+
+        const questionSample = {
+            type: `multiple`,
+            question: `1 + 1 = ?`,
+            //for multiple choice
+            correctAnswer: `a`,
+            listAnswer: [{
+                    key: `a`,
+                    content: `10`,
+                },
+                {
+                    key: `b`,
+                    content: `1`,
+                },
+                {
+                    key: `c`,
+                    content: `3`,
+                },
+                {
+                    key: `d`,
+                    content: `2`,
+                }
+            ],
+            timeLimit: 16 // seconds
+        };
+
+        const answerWrapper = document.createElement("UL");
+
+        for (let i = 0; i < questionSample.listAnswer.length; i++) {
+
+            const node = document.createElement("LI"); // Create a <li> node
+
+            const circleAnswer = document.createElement("I");
+            circleAnswer.className = "far fa-circle"
+            node.appendChild(circleAnswer)
+
+            const textnode = document.createTextNode(questionSample.listAnswer[i].content); // Create a text node
+            node.appendChild(textnode); // Append the text to <li>
+
+            
+
+            answerWrapper.appendChild(node);
+        }
+
+        document.getElementById("answer").appendChild(answerWrapper)
     </script>
 </body>
 </html>
