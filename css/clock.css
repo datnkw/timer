@@ -10,6 +10,8 @@
     display: flex;
 
     cursor: pointer;
+
+    position: relative;
 }
 
 #clock p {
@@ -24,4 +26,84 @@
 
 #answer input{
     font-size: 40px;
+}
+
+#answer ul {
+    list-style-type:none;
+}
+
+#answer li {
+    margin: 10px;
+
+    /* justify-content: center; */
+
+    align-items: center;
+
+    /* /display: flex; */
+}
+
+#answer li i {
+    cursor: pointer;
+    margin: 5px;
+}
+
+.btn-wrapper {
+    position: absolute;
+    right: -150px;
+    top: 80px;
+
+    width: 200px !important;
+    height: 50px;
+
+    cursor: pointer;
+
+    overflow: hidden;
+}
+
+.btn-wrapper.pre {
+    right: 450px;
+}
+
+.btn {
+    width: 150px !important;
+    height: 50px;
+    background-color: #d9c9ba;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn #btn-pre{
+    position: absolute;
+    right: 0px;
+}
+
+#btn-pre::before{
+    content: "";
+
+    width: 40px !important;
+    height: 40px;
+    z-index: -1;
+
+    background-color: #d9c9ba;
+
+    position: absolute;
+    left: 10px;
+
+    transform: rotate(45deg);
+}
+
+#btn-next::before{
+    content: "";
+
+    width: 40px !important;
+    height: 40px;
+    z-index: -1;
+
+    background-color: #d9c9ba;
+
+    position: absolute;
+    right: 10px;
+
+    transform: rotate(45deg);
 }
