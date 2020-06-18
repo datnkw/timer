@@ -127,7 +127,7 @@ class ClockAndQA {
     },
     {
         type: `text`,
-        question: `Chuột nào đi bằng 2 chân?`,
+        question: `Which mouse walks with 2 feet?`,
         //for multiple choice
         correctAnswer: `mickey`,
         answerList: [],
@@ -374,7 +374,8 @@ class ClockAndQA {
 
   generateMultipleAnswer(questionSample) {
     const $this = this;
-
+    this.answerTextInput.style.display = "none";
+    this.answerWrapper.style.display = "block";
     //const answerWrapper = document.createElement("UL");
 
     for (let i = 0; i < questionSample.answerList.length; i++) {
@@ -392,21 +393,25 @@ class ClockAndQA {
 
   generateTextAnswer() {
     const $this = this;
-    //const answerInput = document.createElement("INPUT");
+    const answerInput = document.createElement("INPUT");
     answerInput.addEventListener("keyup", function (event) {
       if (event.keyCode === 13) {
         event.preventDefault();
         //this.switchCounting();
         //this.isAnswerAlready = true;
 
-        this.stopCounting($this.timer)
+        //this.stopCounting($this.timer)
         //clearInterval($this.timer);
 
-        saveResult(this.innerHTML)
+        $this.saveResult(this.innerHTML)
+
+        console.log("list result: ", $this.resultList)
       }
     })
-
-    this.answer.appendChild(answerInput)
+    this.answerWrapper.style.display = "none";
+    this.answerTextInput.style.display = "block";
+    // this.answer.innerHTML = "";
+    // this.answer.appendChild(answerInput)
   }
 
   generateQuestion(questionBundle, index) {
@@ -422,7 +427,7 @@ class ClockAndQA {
 
     this.question.innerHTML = questionBundle[index].question
 
-    if (questionBundle[index].type === `multiple`)
+    if (questionBundle[index].type === MULTIPLE_CHOICE_TYPE)
       this.generateMultipleAnswer(questionBundle[index])
     else
       this.generateTextAnswer()
@@ -431,7 +436,7 @@ class ClockAndQA {
   setUpAnswerArea() {
     const $this = this;
 
-    const answerWrapper = document.createElement("UL");
+    this.answerWrapper = document.createElement("UL");
 
     for (let i = 0; i < NUMBER_CHECK_ITEM; i++) {
 
@@ -453,12 +458,12 @@ class ClockAndQA {
 
       //answerItem.appendChild(textnode); 
 
-      answerWrapper.appendChild(answerItem);
+      this.answerWrapper.appendChild(answerItem);
 
       this.answerCheckList.push(answerItem);
     }
 
-    this.answer.appendChild(answerWrapper)
+    this.answer.appendChild(this.answerWrapper)
 
     this.answerTextInput = document.createElement("INPUT");
     this.answerTextInput.style.display = 'none';
