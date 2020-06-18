@@ -11,19 +11,28 @@
 
 <body>
     <div id="wrapper">
-        
+
+        <div id="current-question">
+            <p>Question: </p>
+            <p>1/20</p>
+        </div>
+
         <div id="clock">
             <p id="minute">00</p>
             <p>:</p>
             <p id="second">00</p>
-<div class="btn-wrapper">
+            
+        </div>
+
+        <div class="btn-wrapper">
             <div id="btn-next" class="btn">Next question</div>
         </div>
         <div class="btn-wrapper pre">
-        <div id="btn-pre" class="btn">Previous question</div>
-    </div>
+            <div id="btn-pre" class="btn">Previous question</div>
         </div>
+
         <div id="question">
+            
         </div>
         <div id="answer">
         </div>
@@ -38,55 +47,9 @@
             question: document.getElementById("question"),
             answer: document.getElementById("answer"),
             btnNext: document.getElementById("btn-next"),
-            btnPre: document.getElementById("btn-pre")
+            btnPre: document.getElementById("btn-pre"),
+            currentQuestion: document.getElementById("current-question")
         })
-
-        // const questionSample = {
-        //     type: `multiple`,
-        //     question: `1 + 1 = ?`,
-        //     //for multiple choice
-        //     correctAnswer: `a`,
-        //     listAnswer: [{
-        //             key: `a`,
-        //             content: `10`,
-        //         },
-        //         {
-        //             key: `b`,
-        //             content: `1`,
-        //         },
-        //         {
-        //             key: `c`,
-        //             content: `3`,
-        //         },
-        //         {
-        //             key: `d`,
-        //             content: `2`,
-        //         }
-        //     ],
-        //     timeLimit: 16 // seconds
-        // };
-
-        // const answerWrapper = document.createElement("UL");
-
-        // for (let i = 0; i < questionSample.listAnswer.length; i++) {
-
-        //     const node = document.createElement("LI"); // Create a <li> node
-
-        //     const circleAnswer = document.createElement("I");
-        //     circleAnswer.className = "far fa-circle"
-        //     circleAnswer.setAttribute("key", questionSample.listAnswer[i].key)
-        //     circleAnswer.addEventListener('click', function (event) {
-        //         console.log(this.getAttribute("key"))
-        //     })
-        //     node.appendChild(circleAnswer)
-
-        //     const textnode = document.createTextNode(questionSample.listAnswer[i].content); // Create a text node
-        //     node.appendChild(textnode); // Append the text to <li>
-
-        //     answerWrapper.appendChild(node);
-        // }
-
-        // document.getElementById("answer").appendChild(answerWrapper)
     </script>
 </body>
 

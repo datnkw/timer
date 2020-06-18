@@ -38,6 +38,8 @@ class ClockAndQA {
         this.btnNext = params.btnNext;
         this.btnPre = params.btnPre;
 
+        this.currentQuestion = params.currentQuestion;
+
         this.valueMinute = 0;
         this.valueSecond = 0;
 
@@ -161,9 +163,6 @@ class ClockAndQA {
     handleTimeDecrement() {
         let second = this.timeLeftList[this.indexQuestion];
 
-        console.log("this timer before stop: ", this.timer)
-        console.log("second in handle time decrement: ", second)
-
         if(second === 0){
             console.log("handleTimeDecrement stop timer")
             
@@ -183,12 +182,13 @@ class ClockAndQA {
             this.answer.style.display = "none";
             this.btnNext.style.display = "none";
             this.btnPre.style.display = "none";
-
+            this.currentQuestion.style.display = "none";
         } else {
             this.question.style.display = "block";
             this.answer.style.display = "block";
             this.btnNext.style.display = "flex";
             this.btnPre.style.display = "flex";
+            this.currentQuestion.style.display = "flex";
         }
     }
 
@@ -203,13 +203,12 @@ class ClockAndQA {
     }
 
     resetTimer(){
-        //this.stopCounting(this.timer);
+        this.stopCounting(this.timer);
         if(!this.isCounting){
             console.log("reset timer")
             this.timer = this.startCounting();
         }
     }
-
 
     resetSelectAnswer(checklist){
         checklist.forEach(element => {
@@ -220,19 +219,21 @@ class ClockAndQA {
     }
 
     resetIsCounting(){
-        this.isCounting = !(this.timeLeftList[this.indexQuestion] === 0);
+        this.isCounting = (this.timeLeftList[this.indexQuestion] === 0);
+    }
+
+    setUpPanelQuestion(){
+        console.log(this.currentQuestion.childNodes)
+
+        this.currentQuestion.childNodes[3].innerHTML = (this.indexQuestion + 1) + "/" + this.questionBundle.length;
     }
 
     setUpQuestion(){
         this.resetSelectAnswer(this.answerCheckList);
-        this.resetTimer();
 
         this.resetIsCounting();
 
-        // console.log("index question: ", this.indexQuestion)
-        // console.log("len question bundle: ", this.questionBundle.length)
-        // if (this.indexQuestion >= this.questionBundle.length)
-        //     return;
+        this.resetTimer();
 
         this.generateQuestion(this.questionBundle, this.questionsOrder[this.indexQuestion]);
 
@@ -266,11 +267,10 @@ class ClockAndQA {
         this.setUpQuestion();
     }
 
-
     handleClickAnswer(answerItem) {
         //hightlight the circle 
 
-        if(!this.checkCanAnswer()){
+        if(!this.isCounting){
             return
         }
 
@@ -294,30 +294,16 @@ class ClockAndQA {
         //const answerWrapper = document.createElement("UL");
 
         for (let i = 0; i < questionSample.answerList.length; i++) {
-
-            //const answerItem = document.createElement("LI"); // Create a <li> node
-
-            //const circleAnswer = document.createElement("I");
-
             //show circle as much as answer
             this.answerCheckList[i].style.display = "flex"
             //set attribute foreach circle
-            this.answerCheckList[i].setAttribute("key", questionSample.answerList[i].key)
+            this.answerCheckList[i].setAttribute("key", questionSample.answerList[i].key);
 
-            //answerItem.appendChild(circleAnswer)
+            if(questionSample.answerList[i].key === this.resultList[this.indexQuestion])
+                this.answerCheckList[i].childNodes[0].className = "fas fa-circle";
 
-            //clear text
-
-
-            //const textnode = document.createTextNode(questionSample.answerList[i].content); // Create a text node
-            //this.answerCheckList[i].appendChild(textnode); // Append the text to <li>
-
-            this.answerCheckList[i].childNodes[1].innerHTML = questionSample.answerList[i].content
-
-            //answerWrapper.appendChild(answerItem);
+            this.answerCheckList[i].childNodes[1].innerHTML = questionSample.answerList[i].content;
         }
-
-        //this.answer.appendChild(answerWrapper)
     }
 
     generateTextAnswer() {
@@ -342,15 +328,11 @@ class ClockAndQA {
     generateQuestion(questionBundle, index) {
         console.log("generate question")
 
-        //const index = this.chooseRandomQuestion(questionBundle)
-
-        //this.chooseRandomQuestion(questionBundle)
-
-        //this.valueSecond = this.timeLeftList[index]
-
         console.log("timeleft: ", this.timeLeftList)
 
         console.log("index: ", index)
+
+        this.setUpPanelQuestion();
 
         this.displayTime(this.timeLeftList[this.indexQuestion])
 
@@ -417,32 +399,12 @@ class ClockAndQA {
         this.answer.appendChild(this.answerTextInput);
     }
 
-    // generateQuestionList(questionBundle){
-    //     this.questionOrder = [];
-
-
-
-    //     let index;
-    //     do{
-    //         index = chooseRandomQuestion(questionBundle)
-
-
-    //         this.questionOrder.push(index)
-    //         if(this.questionOrder.length === questionBundle.length)
-    //             break;
-    //     }while(!this.questionOrder.includes(index))
-    // }
-
     setUpEvent() {
         this.setUpAnswerArea();
 
         this.setVisibilityQA();
 
         this.questionsOrder = createShuffledArray(this.questionBundle)
-
-        // this.questionsOrder.forEach(element => {
-        //     this.timeLeftList[element] = 
-        // })
 
         for (let i = 0; i < this.questionsOrder.length; i++) {
             this.timeLeftList[i] = this.questionBundle[this.questionsOrder[i]].timeLimit
@@ -456,22 +418,14 @@ class ClockAndQA {
                 this.setVisibilityQA();
                 this.generateQuestion(this.questionBundle, this.questionsOrder[this.indexQuestion])
             }
-            // else{
-            //     this.stopCounting(this.timer);
-            // }
         })
 
         this.btnNext.addEventListener('click', () => {
             this.goToNextQuestion()
         })
 
-        // this.answer.addEventListener("keyup", (event) => {
-        //     if (event.keyCode === 13) {
-        //         event.preventDefault();
-        //         this.switchCounting();
-        //         this.isAnswerAlready = true;
-        //         clearInterval(this.timer);
-        //     }
-        // });
+        this.btnPre.addEventListener('click', () => {
+            this.goToPreQuestion()
+        })
     }
 }
