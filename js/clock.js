@@ -61,77 +61,78 @@ class ClockAndQA {
 
   timeLeftList = [];
 
-  questionBundle = [{
-      type: MULTIPLE_CHOICE_TYPE,
-      question: `1 + 1 = ?`,
-      //for multiple choice
-      correctAnswer: `d`,
-      answerList: [{
-          key: `a`,
-          content: `10`,
-        },
-        {
-          key: `b`,
-          content: `1`,
-        },
-        {
-          key: `c`,
-          content: `3`,
-        },
-        {
-          key: `d`,
-          content: `2`,
-        }
-      ],
-      timeLimit: 3 // seconds,
-    },
-    {
-      type: MULTIPLE_CHOICE_TYPE,
-      question: `a + b = ?`,
-      //for multiple choice
-      correctAnswer: `a`,
-      answerList: [{
-          key: `a`,
-          content: `ab`,
-        },
-        {
-          key: `b`,
-          content: `ba`,
-        },
-        {
-          key: `c`,
-          content: `aa`,
-        }
-      ],
-      timeLimit: 2 // seconds
-    },
-    {
-      type: MULTIPLE_CHOICE_TYPE,
-      question: `a + b + c = ?`,
-      //for multiple choice
-      correctAnswer: `a`,
-      answerList: [{
-          key: `a`,
-          content: `abc`,
-        },
-        {
-          key: `b`,
-          content: `bac`,
-        },
-        {
-          key: `c`,
-          content: `aac`,
-        }
-      ],
-      timeLimit: 2 // seconds
-    },
+  questionBundle = [
+    // {
+    //   type: MULTIPLE_CHOICE_TYPE,
+    //   question: `1 + 1 = ?`,
+    //   //for multiple choice
+    //   correctAnswer: `d`,
+    //   answerList: [{
+    //       key: `a`,
+    //       content: `10`,
+    //     },
+    //     {
+    //       key: `b`,
+    //       content: `1`,
+    //     },
+    //     {
+    //       key: `c`,
+    //       content: `3`,
+    //     },
+    //     {
+    //       key: `d`,
+    //       content: `2`,
+    //     }
+    //   ],
+    //   timeLimit: 3 // seconds,
+    // },
+    // {
+    //   type: MULTIPLE_CHOICE_TYPE,
+    //   question: `a + b = ?`,
+    //   //for multiple choice
+    //   correctAnswer: `a`,
+    //   answerList: [{
+    //       key: `a`,
+    //       content: `ab`,
+    //     },
+    //     {
+    //       key: `b`,
+    //       content: `ba`,
+    //     },
+    //     {
+    //       key: `c`,
+    //       content: `aa`,
+    //     }
+    //   ],
+    //   timeLimit: 2 // seconds
+    // },
+    // {
+    //   type: MULTIPLE_CHOICE_TYPE,
+    //   question: `a + b + c = ?`,
+    //   //for multiple choice
+    //   correctAnswer: `a`,
+    //   answerList: [{
+    //       key: `a`,
+    //       content: `abc`,
+    //     },
+    //     {
+    //       key: `b`,
+    //       content: `bac`,
+    //     },
+    //     {
+    //       key: `c`,
+    //       content: `aac`,
+    //     }
+    //   ],
+    //   timeLimit: 2 // seconds
+    // },
     {
         type: `text`,
         question: `Which mouse walks with 2 feet?`,
         //for multiple choice
         correctAnswer: `mickey`,
         answerList: [],
-        timeLimit: 16 // seconds
+        timeLimit: 3 // seconds
     }
   ]
 
@@ -169,6 +170,12 @@ class ClockAndQA {
       console.log("answer: ", this.resultList[i]);
       console.log("result: ", this.questionBundle[this.questionsOrder[i]].correctAnswer)
 
+      if(this.questionBundle[this.questionsOrder[i]].type === TEXT_TYPE){
+        //if(this.resultList[i].includes)
+        this.booleanResultList[i] = this.resultList[i];
+        continue;
+      }
+
       if (this.resultList[i] === this.questionBundle[this.questionsOrder[i]].correctAnswer) {
         this.booleanResultList[i] = true;
       } else {
@@ -177,6 +184,27 @@ class ClockAndQA {
     }
 
     console.log("boolean result: ", this.booleanResultList)
+  }
+
+  getContentAnswer(i){
+    let stringContent = '';
+
+    console.log(this.questionBundle[this.questionsOrder[i]].type);
+
+    if(this.questionBundle[this.questionsOrder[i]].type === TEXT_TYPE){
+      console.log("text result");
+      console.log("this result list: ", this.resultList)
+      console.log("this i: ", i)
+      console.log("this answer: ", this.resultList[i]);
+      stringContent = this.resultList[i];
+    }else{
+     stringContent = this.questionBundle[this.questionsOrder[i]]
+      .answerList.find(answer => answer.key === this.resultList[i]).content;
+    }
+    console.log("stringContent: ", stringContent);
+    console.log("question: ", this.questionBundle[this.questionsOrder[i]].question);
+
+    return this.questionBundle[this.questionsOrder[i]].question + " " + stringContent;
   }
 
   renderResult() {
@@ -194,19 +222,16 @@ class ClockAndQA {
 
       const resultQuestion = document.createElement("p");
 
-      let stringContent = this.questionBundle[this.questionsOrder[i]]
-        .answerList.find(answer => answer.key === this.resultList[i]).content;
-
-      console.log("stringContent: ", stringContent);
-      console.log("question: ", this.questionBundle[this.questionsOrder[i]].question);
-
-      stringContent = this.questionBundle[this.questionsOrder[i]].question + " " + stringContent;
+      let stringContent = this.getContentAnswer(i)
+      
 
       content = document.createTextNode(stringContent);
       if (this.booleanResultList[i] == true) {
         resultQuestion.className += "answer correct";
-      } else {
+      } else if(this.booleanResultList[i] == false){
         resultQuestion.className += "answer wrong";
+      }else {
+        resultQuestion.className +=  "answer";
       }
 
       resultQuestion.appendChild(content);
@@ -368,6 +393,8 @@ class ClockAndQA {
   }
 
   saveResult(key) {
+    console.log(key);
+
     this.resultList[this.indexQuestion] = key;
     //console.log(this.resultList)
   }
@@ -392,22 +419,24 @@ class ClockAndQA {
   }
 
   generateTextAnswer() {
+    console.log("text input: ")
+
     const $this = this;
     const answerInput = document.createElement("INPUT");
-    answerInput.addEventListener("keyup", function (event) {
-      if (event.keyCode === 13) {
-        event.preventDefault();
-        //this.switchCounting();
-        //this.isAnswerAlready = true;
+    // answerInput.addEventListener("keyup", function (event) {
+    //   if (event.keyCode === 13) {
+    //     event.preventDefault();
+    //     //this.switchCounting();
+    //     //this.isAnswerAlready = true;
 
-        //this.stopCounting($this.timer)
-        //clearInterval($this.timer);
+    //     //this.stopCounting($this.timer)
+    //     //clearInterval($this.timer);
 
-        $this.saveResult(this.innerHTML)
+    //     $this.saveResult(this.innerHTML)
 
-        console.log("list result: ", $this.resultList)
-      }
-    })
+    //     console.log("list result: ", $this.resultList)
+    //   }
+    // })
     this.answerWrapper.style.display = "none";
     this.answerTextInput.style.display = "block";
     // this.answer.innerHTML = "";
@@ -475,11 +504,12 @@ class ClockAndQA {
         //this.isAnswerAlready = true;
         // clearInterval($this.timer);
 
-        this.stopCounting();
+        // this.stopCounting();
+        console.log("inner html: ", this.value);
 
-        $this.saveResult(this.innerHTML);
+        $this.saveResult(this.value);
 
-        $this.goToNextQuestion();
+        // $this.goToNextQuestion();
       }
     })
 
