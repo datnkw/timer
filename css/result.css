@@ -1,0 +1,21 @@
+#result{
+    display: none;
+}
+
+.sub-result {
+    display: flex;
+
+}
+
+.sub-result p {
+    font-size: 30px !important;
+    margin: 10px;
+}
+
+.correct {
+    color: #94a940;
+}
+
+.wrong {
+    color: #ee4936;
+}
