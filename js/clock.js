@@ -130,7 +130,7 @@ class ClockAndQA {
     },
     {
         type: `text`,
-        question: `Which mouse walks with 2 feet?`,
+        question: `Which mouse walks on two legs?`,
         //for multiple choice
         correctAnswer: `mickey`,
         answerList: [],
