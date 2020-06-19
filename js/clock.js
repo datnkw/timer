@@ -42,6 +42,8 @@ class ClockAndQA {
 
     this.resultContainer = params.resultContainer;
 
+    this.btnSubmit = params.btnSubmit;
+
     this.valueMinute = 0;
     this.valueSecond = 0;
 
@@ -62,70 +64,70 @@ class ClockAndQA {
   timeLeftList = [];
 
   questionBundle = [
-    // {
-    //   type: MULTIPLE_CHOICE_TYPE,
-    //   question: `1 + 1 = ?`,
-    //   //for multiple choice
-    //   correctAnswer: `d`,
-    //   answerList: [{
-    //       key: `a`,
-    //       content: `10`,
-    //     },
-    //     {
-    //       key: `b`,
-    //       content: `1`,
-    //     },
-    //     {
-    //       key: `c`,
-    //       content: `3`,
-    //     },
-    //     {
-    //       key: `d`,
-    //       content: `2`,
-    //     }
-    //   ],
-    //   timeLimit: 3 // seconds,
-    // },
-    // {
-    //   type: MULTIPLE_CHOICE_TYPE,
-    //   question: `a + b = ?`,
-    //   //for multiple choice
-    //   correctAnswer: `a`,
-    //   answerList: [{
-    //       key: `a`,
-    //       content: `ab`,
-    //     },
-    //     {
-    //       key: `b`,
-    //       content: `ba`,
-    //     },
-    //     {
-    //       key: `c`,
-    //       content: `aa`,
-    //     }
-    //   ],
-    //   timeLimit: 2 // seconds
-    // },
-    // {
-    //   type: MULTIPLE_CHOICE_TYPE,
-    //   question: `a + b + c = ?`,
-    //   //for multiple choice
-    //   correctAnswer: `a`,
-    //   answerList: [{
-    //       key: `a`,
-    //       content: `abc`,
-    //     },
-    //     {
-    //       key: `b`,
-    //       content: `bac`,
-    //     },
-    //     {
-    //       key: `c`,
-    //       content: `aac`,
-    //     }
-    //   ],
-    //   timeLimit: 2 // seconds
-    // },
+    {
+      type: MULTIPLE_CHOICE_TYPE,
+      question: `1 + 1 = ?`,
+      //for multiple choice
+      correctAnswer: `d`,
+      answerList: [{
+          key: `a`,
+          content: `10`,
+        },
+        {
+          key: `b`,
+          content: `1`,
+        },
+        {
+          key: `c`,
+          content: `3`,
+        },
+        {
+          key: `d`,
+          content: `2`,
+        }
+      ],
+      timeLimit: 3 // seconds,
+    },
+    {
+      type: MULTIPLE_CHOICE_TYPE,
+      question: `a + b = ?`,
+      //for multiple choice
+      correctAnswer: `a`,
+      answerList: [{
+          key: `a`,
+          content: `ab`,
+        },
+        {
+          key: `b`,
+          content: `ba`,
+        },
+        {
+          key: `c`,
+          content: `aa`,
+        }
+      ],
+      timeLimit: 2 // seconds
+    },
+    {
+      type: MULTIPLE_CHOICE_TYPE,
+      question: `a + b + c = ?`,
+      //for multiple choice
+      correctAnswer: `a`,
+      answerList: [{
+          key: `a`,
+          content: `abc`,
+        },
+        {
+          key: `b`,
+          content: `bac`,
+        },
+        {
+          key: `c`,
+          content: `aac`,
+        }
+      ],
+      timeLimit: 2 // seconds
+    },
     {
         type: `text`,
         question: `Which mouse walks with 2 feet?`,
@@ -137,7 +139,6 @@ class ClockAndQA {
   ]
 
   startCounting() {
-    //console.log("begin count")
     this.isCounting = true;
     return setInterval(() => {
       this.handleTimeDecrement();
@@ -145,7 +146,6 @@ class ClockAndQA {
   }
 
   stopCounting(savedInterval) {
-    //console.log("stop count")
     this.isCounting = false;
     return clearInterval(savedInterval);
   }
@@ -155,8 +155,6 @@ class ClockAndQA {
   }
 
   displayTime(second) {
-    //console.log("display time: ", second)
-
     const minute = Math.floor(second / 60)
 
     second = second - minute * 60
@@ -189,6 +187,10 @@ class ClockAndQA {
   getContentAnswer(i){
     let stringContent = '';
 
+    if(!this.resultList[i]){
+      return 'No answer';
+    }
+
     console.log(this.questionBundle[this.questionsOrder[i]].type);
 
     if(this.questionBundle[this.questionsOrder[i]].type === TEXT_TYPE){
@@ -204,7 +206,8 @@ class ClockAndQA {
     console.log("stringContent: ", stringContent);
     console.log("question: ", this.questionBundle[this.questionsOrder[i]].question);
 
-    return this.questionBundle[this.questionsOrder[i]].question + " " + stringContent;
+    return stringContent;
+    // return this.questionBundle[this.questionsOrder[i]].question + " " + stringContent;
   }
 
   renderResult() {
@@ -222,7 +225,7 @@ class ClockAndQA {
 
       const resultQuestion = document.createElement("p");
 
-      let stringContent = this.getContentAnswer(i)
+      let stringContent = this.questionBundle[this.questionsOrder[i]].question + " " + this.getContentAnswer(i)
       
 
       content = document.createTextNode(stringContent);
@@ -246,6 +249,10 @@ class ClockAndQA {
 
   finishTest() {
     this.isAnswerAlready = true;
+    this.isCounting = false;
+
+    this.stopCounting(this.timer);
+    this.displayTime(0);
 
     this.setVisibilityQA();
 
@@ -269,14 +276,11 @@ class ClockAndQA {
     let second = this.timeLeftList[this.indexQuestion];
 
     if (second === 0) {
-      //console.log("handleTimeDecrement stop timer")
-
       this.stopCounting(this.timer);
+      this.disableTextAnswer();
 
       if (this.checkTimeOut())
-        this.finishTest()
-
-      //console.log("this timer when stop: ", this.timer)
+        this.finishTest();
       return
     }
 
@@ -292,12 +296,14 @@ class ClockAndQA {
       this.btnNext.style.display = "none";
       this.btnPre.style.display = "none";
       this.currentQuestion.style.display = "none";
+      this.btnSubmit.style.display = "none";
     } else {
       this.question.style.display = "block";
       this.answer.style.display = "block";
       this.btnNext.style.display = "flex";
       this.btnPre.style.display = "flex";
       this.currentQuestion.style.display = "flex";
+      this.btnSubmit.style.display = "block";
     }
   }
 
@@ -314,15 +320,12 @@ class ClockAndQA {
   resetTimer() {
     this.stopCounting(this.timer);
     if (!this.isCounting) {
-      //console.log("reset timer")
       this.timer = this.startCounting();
     }
   }
 
   resetSelectAnswer(checklist) {
     checklist.forEach(element => {
-      // //console.log("classname: ", element.childNodes)
-
       element.childNodes[0].className = "far fa-circle"
     })
   }
@@ -332,8 +335,6 @@ class ClockAndQA {
   }
 
   setUpPanelQuestion() {
-    //console.log(this.currentQuestion.childNodes)
-
     this.currentQuestion.childNodes[3].innerHTML = (this.indexQuestion + 1) + "/" + this.questionBundle.length;
   }
 
@@ -345,29 +346,17 @@ class ClockAndQA {
     this.resetTimer();
 
     this.generateQuestion(this.questionBundle, this.questionsOrder[this.indexQuestion]);
-
   }
 
   goToNextQuestion() {
-    //console.log("Go to next question")
-
-    //this.generateQuestion(this.questionBundle, this.questionsOrder[this.indexQuestion]);
     if (this.indexQuestion + 1 >= this.questionBundle.length) {
-      //this.indexQuestion++;
       return;
     }
-
     this.indexQuestion++;
     this.setUpQuestion();
-
-
-
-    // if(this.indexQuestion == this.questionBundle.length)
-    //     return;
   }
 
   goToPreQuestion() {
-
     if (this.indexQuestion - 1 <= -1)
       return;
 
@@ -377,8 +366,6 @@ class ClockAndQA {
   }
 
   handleClickAnswer(answerItem) {
-    //hightlight the circle 
-
     if (!this.isCounting) {
       return
     }
@@ -388,22 +375,16 @@ class ClockAndQA {
     answerItem.childNodes[0].className = "fas fa-circle"
 
     this.saveResult(answerItem.getAttribute("key"))
-
-    //this.goToNextQuestion()
   }
 
   saveResult(key) {
-    console.log(key);
-
     this.resultList[this.indexQuestion] = key;
-    //console.log(this.resultList)
   }
 
   generateMultipleAnswer(questionSample) {
     const $this = this;
     this.answerTextInput.style.display = "none";
     this.answerWrapper.style.display = "block";
-    //const answerWrapper = document.createElement("UL");
 
     for (let i = 0; i < questionSample.answerList.length; i++) {
       //show circle as much as answer
@@ -418,38 +399,17 @@ class ClockAndQA {
     }
   }
 
+  disableTextAnswer(){
+    this.answerTextInput.disabled = true;
+  }
+
   generateTextAnswer() {
-    console.log("text input: ")
-
-    const $this = this;
-    const answerInput = document.createElement("INPUT");
-    // answerInput.addEventListener("keyup", function (event) {
-    //   if (event.keyCode === 13) {
-    //     event.preventDefault();
-    //     //this.switchCounting();
-    //     //this.isAnswerAlready = true;
-
-    //     //this.stopCounting($this.timer)
-    //     //clearInterval($this.timer);
-
-    //     $this.saveResult(this.innerHTML)
-
-    //     console.log("list result: ", $this.resultList)
-    //   }
-    // })
     this.answerWrapper.style.display = "none";
     this.answerTextInput.style.display = "block";
-    // this.answer.innerHTML = "";
-    // this.answer.appendChild(answerInput)
+    this.answerTextInput.value = this.resultList[this.indexQuestion] || '';
   }
 
   generateQuestion(questionBundle, index) {
-    //console.log("generate question")
-
-    //console.log("timeleft: ", this.timeLeftList)
-
-    //console.log("index: ", index)
-
     this.setUpPanelQuestion();
 
     this.displayTime(this.timeLeftList[this.indexQuestion])
@@ -482,10 +442,6 @@ class ClockAndQA {
       answerItem.appendChild(circleAnswer);
 
       answerItem.appendChild(document.createElement("P"))
-
-      //const textnode = document.createTextNode(questionSample.answerList[i].content);
-
-      //answerItem.appendChild(textnode); 
 
       this.answerWrapper.appendChild(answerItem);
 
@@ -545,6 +501,10 @@ class ClockAndQA {
 
     this.btnPre.addEventListener('click', () => {
       this.goToPreQuestion()
+    })
+
+    this.btnSubmit.addEventListener('click', () => {
+      this.finishTest();
     })
   }
 
