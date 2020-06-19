@@ -24,7 +24,6 @@ function createShuffledArray(array) {
 
 const MULTIPLE_CHOICE_TYPE = 'multiple';
 const TEXT_TYPE = 'text';
-const NUMBER_CHECK_ITEM = 4;
 
 //const this.questionBundle = require("./this.questionBundle.json");
 //let this.questionBundle = require("./this.questionBundle.json");
@@ -54,17 +53,13 @@ class ClockAndQA {
     this.isCounting = false;
     this.isAnswerAlready = false;
 
+    this.answerCheckList = [];
+    this.resultList = [];
+    this.booleanResultList = [];
+    this.timeLeftList = [];
+
     this.setUpEvent();
   }
-
-  answerCheckList = [];
-
-  resultList = [];
-
-  booleanResultList = [];
-
-  timeLeftList = [];
-
 
   questionBundle = [
     {
@@ -87,9 +82,21 @@ class ClockAndQA {
         {
           key: `d`,
           content: `2`,
+        },
+        {
+          key: `e`,
+          content: `20`,
+        },
+        {
+          key: `f`,
+          content: `21`,
+        },
+        {
+          key: `g`,
+          content: `22`,
         }
       ],
-      timeLimit: 3 // seconds,
+      timeLimit: 600 // seconds,
     },
     {
       type: MULTIPLE_CHOICE_TYPE,
@@ -109,7 +116,7 @@ class ClockAndQA {
           content: `aa`,
         }
       ],
-      timeLimit: 2 // seconds
+      timeLimit: 20 // seconds
     },
     {
       type: MULTIPLE_CHOICE_TYPE,
@@ -129,7 +136,7 @@ class ClockAndQA {
           content: `aac`,
         }
       ],
-      timeLimit: 2 // seconds
+      timeLimit: 70 // seconds
     },
     {
         type: `text`,
@@ -137,7 +144,7 @@ class ClockAndQA {
         //for multiple choice
         correctAnswer: `mickey`,
         answerList: [],
-        timeLimit: 3 // seconds
+        timeLimit: 70 // seconds
     }
   ]
 
@@ -168,9 +175,6 @@ class ClockAndQA {
 
   checkResult() {
     for (let i = 0; i < this.questionsOrder.length; i++) {
-      console.log("answer: ", this.resultList[i]);
-      console.log("result: ", this.questionBundle[this.questionsOrder[i]].correctAnswer)
-
       if(this.questionBundle[this.questionsOrder[i]].type === TEXT_TYPE){
         this.booleanResultList[i] = this.resultList[i];
         continue;
@@ -182,33 +186,23 @@ class ClockAndQA {
         this.booleanResultList[i] = false;
       }
     }
+  }
 
-    console.log("boolean result: ", this.booleanResultList)
+  getContentNotNullAnswer() {
+    if(this.questionBundle[this.questionsOrder[i]].type === TEXT_TYPE){
+      return this.resultList[i];
+    }else{
+     return this.questionBundle[this.questionsOrder[i]]
+      .answerList.find(answer => answer.key === this.resultList[i]).content;
+    }
   }
 
   getContentAnswer(i){
-    let stringContent = '';
-
     if(!this.resultList[i]){
       return 'No answer';
     }
-
-    console.log(this.questionBundle[this.questionsOrder[i]].type);
-
-    if(this.questionBundle[this.questionsOrder[i]].type === TEXT_TYPE){
-      console.log("text result");
-      console.log("this result list: ", this.resultList)
-      console.log("this i: ", i)
-      console.log("this answer: ", this.resultList[i]);
-      stringContent = this.resultList[i];
-    }else{
-     stringContent = this.questionBundle[this.questionsOrder[i]]
-      .answerList.find(answer => answer.key === this.resultList[i]).content;
-    }
-    console.log("stringContent: ", stringContent);
-    console.log("question: ", this.questionBundle[this.questionsOrder[i]].question);
-
-    return stringContent;
+    
+    return getContentNotNullAnswer();
   }
 
   renderResult() {
@@ -427,12 +421,25 @@ class ClockAndQA {
       this.generateTextAnswer()
   }
 
+  getTheBiggestAmountAnswers() {
+    let max = 0;
+
+    for(let i = 0; i < this.questionBundle.length; i++){
+      if(max < this.questionBundle[i].answerList.length)
+        max = this.questionBundle[i].answerList.length;
+    }
+
+    return max;
+  }
+
   setUpAnswerArea() {
     const $this = this;
 
     this.answerWrapper = document.createElement("UL");
 
-    for (let i = 0; i < NUMBER_CHECK_ITEM; i++) {
+    const biggestAmountAnswers = this.getTheBiggestAmountAnswers();
+
+    for (let i = 0; i < biggestAmountAnswers; i++) {
 
       const answerItem = document.createElement("LI");
       answerItem.style.display = 'none';
@@ -452,6 +459,7 @@ class ClockAndQA {
 
       this.answerCheckList.push(answerItem);
     }
+    
 
     this.answer.appendChild(this.answerWrapper)
 
