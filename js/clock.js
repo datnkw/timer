@@ -46,6 +46,8 @@ class ClockAndQA {
 
     this.btnSubmit = params.btnSubmit;
 
+    this.questionInput = params.questionInput;
+
     this.valueMinute = 0;
     this.valueSecond = 0;
 
@@ -66,80 +68,80 @@ class ClockAndQA {
   timeLeftList = [];
 
 
-  questionBundle = [
-    {
-      type: MULTIPLE_CHOICE_TYPE,
-      question: `1 + 1 = ?`,
-      //for multiple choice
-      correctAnswer: `d`,
-      answerList: [{
-          key: `a`,
-          content: `10`,
-        },
-        {
-          key: `b`,
-          content: `1`,
-        },
-        {
-          key: `c`,
-          content: `3`,
-        },
-        {
-          key: `d`,
-          content: `2`,
-        }
-      ],
-      timeLimit: 3 // seconds,
-    },
-    {
-      type: MULTIPLE_CHOICE_TYPE,
-      question: `a + b = ?`,
-      //for multiple choice
-      correctAnswer: `a`,
-      answerList: [{
-          key: `a`,
-          content: `ab`,
-        },
-        {
-          key: `b`,
-          content: `ba`,
-        },
-        {
-          key: `c`,
-          content: `aa`,
-        }
-      ],
-      timeLimit: 2 // seconds
-    },
-    {
-      type: MULTIPLE_CHOICE_TYPE,
-      question: `a + b + c = ?`,
-      //for multiple choice
-      correctAnswer: `a`,
-      answerList: [{
-          key: `a`,
-          content: `abc`,
-        },
-        {
-          key: `b`,
-          content: `bac`,
-        },
-        {
-          key: `c`,
-          content: `aac`,
-        }
-      ],
-      timeLimit: 2 // seconds
-    },
-    {
-        type: `text`,
-        question: `Which mouse walks on two legs?`,
-        //for multiple choice
-        correctAnswer: `mickey`,
-        answerList: [],
-        timeLimit: 3 // seconds
-    }
-  ]
+  // questionBundle = [
+  //   {
+  //     type: MULTIPLE_CHOICE_TYPE,
+  //     question: `1 + 1 = ?`,
+  //     //for multiple choice
+  //     correctAnswer: `d`,
+  //     answerList: [{
+  //         key: `a`,
+  //         content: `10`,
+  //       },
+  //       {
+  //         key: `b`,
+  //         content: `1`,
+  //       },
+  //       {
+  //         key: `c`,
+  //         content: `3`,
+  //       },
+  //       {
+  //         key: `d`,
+  //         content: `2`,
+  //       }
+  //     ],
+  //     timeLimit: 3 // seconds,
+  //   },
+  //   {
+  //     type: MULTIPLE_CHOICE_TYPE,
+  //     question: `a + b = ?`,
+  //     //for multiple choice
+  //     correctAnswer: `a`,
+  //     answerList: [{
+  //         key: `a`,
+  //         content: `ab`,
+  //       },
+  //       {
+  //         key: `b`,
+  //         content: `ba`,
+  //       },
+  //       {
+  //         key: `c`,
+  //         content: `aa`,
+  //       }
+  //     ],
+  //     timeLimit: 2 // seconds
+  //   },
+  //   {
+  //     type: MULTIPLE_CHOICE_TYPE,
+  //     question: `a + b + c = ?`,
+  //     //for multiple choice
+  //     correctAnswer: `a`,
+  //     answerList: [{
+  //         key: `a`,
+  //         content: `abc`,
+  //       },
+  //       {
+  //         key: `b`,
+  //         content: `bac`,
+  //       },
+  //       {
+  //         key: `c`,
+  //         content: `aac`,
+  //       }
+  //     ],
+  //     timeLimit: 2 // seconds
+  //   },
+  //   {
+  //       type: `text`,
+  //       question: `Which mouse walks on two legs?`,
+  //       //for multiple choice
+  //       correctAnswer: `mickey`,
+  //       answerList: [],
+  //       timeLimit: 3 // seconds
+  //   }
+  // ]
 
   startCounting() {
     this.isCounting = true;
@@ -305,6 +307,8 @@ class ClockAndQA {
       this.btnPre.style.display = "flex";
       this.currentQuestion.style.display = "flex";
       this.btnSubmit.style.display = "block";
+
+      this.questionInput.style.display = "none";
     }
   }
 
@@ -470,22 +474,34 @@ class ClockAndQA {
     this.answer.appendChild(this.answerTextInput);
   }
 
-  setUpEvent() {
-    
-
-    this.setUpAnswerArea();
-
-    this.setVisibilityQA();
-
+  setUpQuestionBundle() {
+    this.questionBundle = JSON.parse(this.questionInput.childNodes[3].value);
     this.questionsOrder = createShuffledArray(this.questionBundle)
 
     for (let i = 0; i < this.questionsOrder.length; i++) {
       this.timeLeftList[i] = this.questionBundle[this.questionsOrder[i]].timeLimit
     }
 
+    this.setUpAnswerArea();
+  }
+
+  setUpEvent() {
+    
+    //this.questionBundle = JSON.parse(this.questionInput.childNodes[3])
+
+    
+
+    this.setVisibilityQA();
+
+    
+
     this.clockContainer.addEventListener('click', () => {
 
       if (!this.isCounting && !this.isAnswerAlready) {
+    //     console.log("textarea: ");
+    // console.log(this.questionInput.childNodes[3].value);
+    this.setUpQuestionBundle();
+    
         this.switchCounting();
         this.timer = this.startCounting();
         this.setVisibilityQA();

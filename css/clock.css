@@ -140,3 +140,16 @@
 #current-question p {
   margin-right: 20px;
 }
+
+#add-question{
+  text-align: center;
+}
+
+#add-question p {
+  font-size: 30px;
+  margin-bottom: 30px;
+}
+
+#add-question textarea {
+  margin-top: 8px;
+}

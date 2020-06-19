@@ -20,12 +20,11 @@
           "content": "2"
         }
       ],
-      "timeLimit": 3
+      "timeLimit": 30
     },
     {
       "type": "multiple",
       "question": "a + b = ?",
-
       "correctAnswer": "a",
       "answerList": [{
           "key": "a",
@@ -40,7 +39,7 @@
           "content": "aa"
         }
       ],
-      "timeLimit": 2
+      "timeLimit": 60
     },
     {
       "type": "multiple",
@@ -59,7 +58,7 @@
           "content": "aac"
         }
       ],
-      "timeLimit": 2
+      "timeLimit": 120
     },
     {
         "type": "text",
@@ -67,6 +66,6 @@
         
         "correctAnswer": "mickey",
         "answerList": [],
-        "timeLimit": 3
+        "timeLimit": 60
     }
   ]
