@@ -2,72 +2,74 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://kit.fontawesome.com/fec4219172.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/index.css">
-    <title>Q&A GAME</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://kit.fontawesome.com/fec4219172.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/index.css">
+  <title>Q&A GAME</title>
 </head>
 
 <body>
-    <div id="wrapper">
+  <div id="wrapper">
 
-        <div id="current-question">
-            <p>Question: </p>
-            <p>1/20</p>
-        </div>
-
-        <div id="submit-btn">
-            Submit
-        </div>
-
-        <div id="clock">
-            <p id="minute">00</p>
-            <p>:</p>
-            <p id="second">00</p>
-            
-        </div>
-
-        <div class="btn-wrapper">
-            <div id="btn-next" class="btn">Next question</div>
-        </div>
-        <div class="btn-wrapper pre">
-            <div id="btn-pre" class="btn">Previous question</div>
-        </div>
-
-        <div id="question">
-            
-        </div>
-        <div id="answer">
-        </div>
-
-        <div id="result">
-            <div class="sub-result">
-                <p>Question 1: </p>
-                <p class="answer correct">a</p>
-            </div>
-            <div class="sub-result">
-                <p>Question 2: </p>
-                <p class="answer wrong">b</p>
-            </div>
-        </div>
+    <div id="current-question">
+      <p>Question: </p>
+      <p>1/20</p>
     </div>
 
-    <script type="text/javascript" src="js/clock.js"></script>
-    <script>
-        const newClock = new ClockAndQA({
-            clockContainer: document.getElementById("clock"),
-            minuteElement: document.getElementById("minute"),
-            secondElement: document.getElementById("second"),
-            question: document.getElementById("question"),
-            answer: document.getElementById("answer"),
-            btnNext: document.getElementById("btn-next"),
-            btnPre: document.getElementById("btn-pre"),
-            currentQuestion: document.getElementById("current-question"),
-            resultContainer: document.getElementById("result"),
-            btnSubmit: document.getElementById("submit-btn")
-        })
-    </script>
+    <button id="submit-btn">
+      <span>
+      Submit
+    </span>
+    </button>
+
+    <div id="clock">
+      <p id="minute">00</p>
+      <p>:</p>
+      <p id="second">00</p>
+
+    </div>
+
+    <div class="btn-wrapper">
+      <div id="btn-next" class="btn"><span>Next question</span></div>
+    </div>
+    <div class="btn-wrapper pre">
+      <div id="btn-pre" class="btn">Previous question</div>
+    </div>
+
+    <div id="question">
+
+    </div>
+    <div id="answer">
+    </div>
+
+    <div id="result">
+      <div class="sub-result">
+        <p>Question 1: </p>
+        <p class="answer correct">a</p>
+      </div>
+      <div class="sub-result">
+        <p>Question 2: </p>
+        <p class="answer wrong">b</p>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="js/clock.js"></script>
+  <script>
+    const newClock = new ClockAndQA({
+      clockContainer: document.getElementById("clock"),
+      minuteElement: document.getElementById("minute"),
+      secondElement: document.getElementById("second"),
+      question: document.getElementById("question"),
+      answer: document.getElementById("answer"),
+      btnNext: document.getElementById("btn-next"),
+      btnPre: document.getElementById("btn-pre"),
+      currentQuestion: document.getElementById("current-question"),
+      resultContainer: document.getElementById("result"),
+      btnSubmit: document.getElementById("submit-btn")
+    })
+  </script>
 </body>
 
 </html>

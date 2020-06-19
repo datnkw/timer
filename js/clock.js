@@ -26,6 +26,8 @@ const MULTIPLE_CHOICE_TYPE = 'multiple';
 const TEXT_TYPE = 'text';
 const NUMBER_CHECK_ITEM = 4;
 
+const questionBundle = require("./questionBundle.json")
+
 class ClockAndQA {
   constructor(params) {
     this.clockContainer = params.clockContainer;
@@ -63,80 +65,81 @@ class ClockAndQA {
 
   timeLeftList = [];
 
-  questionBundle = [
-    {
-      type: MULTIPLE_CHOICE_TYPE,
-      question: `1 + 1 = ?`,
-      //for multiple choice
-      correctAnswer: `d`,
-      answerList: [{
-          key: `a`,
-          content: `10`,
-        },
-        {
-          key: `b`,
-          content: `1`,
-        },
-        {
-          key: `c`,
-          content: `3`,
-        },
-        {
-          key: `d`,
-          content: `2`,
-        }
-      ],
-      timeLimit: 3 // seconds,
-    },
-    {
-      type: MULTIPLE_CHOICE_TYPE,
-      question: `a + b = ?`,
-      //for multiple choice
-      correctAnswer: `a`,
-      answerList: [{
-          key: `a`,
-          content: `ab`,
-        },
-        {
-          key: `b`,
-          content: `ba`,
-        },
-        {
-          key: `c`,
-          content: `aa`,
-        }
-      ],
-      timeLimit: 2 // seconds
-    },
-    {
-      type: MULTIPLE_CHOICE_TYPE,
-      question: `a + b + c = ?`,
-      //for multiple choice
-      correctAnswer: `a`,
-      answerList: [{
-          key: `a`,
-          content: `abc`,
-        },
-        {
-          key: `b`,
-          content: `bac`,
-        },
-        {
-          key: `c`,
-          content: `aac`,
-        }
-      ],
-      timeLimit: 2 // seconds
-    },
-    {
-        type: `text`,
-        question: `Which mouse walks on two legs?`,
-        //for multiple choice
-        correctAnswer: `mickey`,
-        answerList: [],
-        timeLimit: 3 // seconds
-    }
-  ]
+
+  // questionBundle = [
+  //   {
+  //     type: MULTIPLE_CHOICE_TYPE,
+  //     question: `1 + 1 = ?`,
+  //     //for multiple choice
+  //     correctAnswer: `d`,
+  //     answerList: [{
+  //         key: `a`,
+  //         content: `10`,
+  //       },
+  //       {
+  //         key: `b`,
+  //         content: `1`,
+  //       },
+  //       {
+  //         key: `c`,
+  //         content: `3`,
+  //       },
+  //       {
+  //         key: `d`,
+  //         content: `2`,
+  //       }
+  //     ],
+  //     timeLimit: 3 // seconds,
+  //   },
+  //   {
+  //     type: MULTIPLE_CHOICE_TYPE,
+  //     question: `a + b = ?`,
+  //     //for multiple choice
+  //     correctAnswer: `a`,
+  //     answerList: [{
+  //         key: `a`,
+  //         content: `ab`,
+  //       },
+  //       {
+  //         key: `b`,
+  //         content: `ba`,
+  //       },
+  //       {
+  //         key: `c`,
+  //         content: `aa`,
+  //       }
+  //     ],
+  //     timeLimit: 2 // seconds
+  //   },
+  //   {
+  //     type: MULTIPLE_CHOICE_TYPE,
+  //     question: `a + b + c = ?`,
+  //     //for multiple choice
+  //     correctAnswer: `a`,
+  //     answerList: [{
+  //         key: `a`,
+  //         content: `abc`,
+  //       },
+  //       {
+  //         key: `b`,
+  //         content: `bac`,
+  //       },
+  //       {
+  //         key: `c`,
+  //         content: `aac`,
+  //       }
+  //     ],
+  //     timeLimit: 2 // seconds
+  //   },
+  //   {
+  //       type: `text`,
+  //       question: `Which mouse walks on two legs?`,
+  //       //for multiple choice
+  //       correctAnswer: `mickey`,
+  //       answerList: [],
+  //       timeLimit: 3 // seconds
+  //   }
+  // ]
 
   startCounting() {
     this.isCounting = true;
@@ -384,9 +387,10 @@ class ClockAndQA {
     this.answerTextInput.style.display = "none";
     this.answerWrapper.style.display = "block";
 
-    for (let i = 0; i < questionSample.answerList.length; i++) {
+    const answerListLength = questionSample.answerList.length
+    for (let i = 0; i < answerListLength; i++) {
       //show circle as much as answer
-      this.answerCheckList[i].style.display = "flex"
+      this.answerCheckList[i].style.display = "flex";
       //set attribute foreach circle
       this.answerCheckList[i].setAttribute("key", questionSample.answerList[i].key);
 
@@ -395,6 +399,9 @@ class ClockAndQA {
 
       this.answerCheckList[i].childNodes[1].innerHTML = questionSample.answerList[i].content;
     }
+    for(let i = answerListLength; i < this.answerCheckList.length; i++){
+      this.answerCheckList[i].style.display = "none";
+    } 
   }
 
   disableTextAnswer(){
@@ -464,6 +471,8 @@ class ClockAndQA {
   }
 
   setUpEvent() {
+    
+
     this.setUpAnswerArea();
 
     this.setVisibilityQA();
