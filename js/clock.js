@@ -26,6 +26,8 @@ const MULTIPLE_CHOICE_TYPE = 'multiple';
 const TEXT_TYPE = 'text';
 const NUMBER_CHECK_ITEM = 4;
 
+//const this.questionBundle = require("./this.questionBundle.json");
+//let this.questionBundle = require("./this.questionBundle.json");
 class ClockAndQA {
   constructor(params) {
     this.clockContainer = params.clockContainer;
@@ -62,6 +64,7 @@ class ClockAndQA {
   booleanResultList = [];
 
   timeLeftList = [];
+
 
   questionBundle = [
     {
@@ -384,9 +387,10 @@ class ClockAndQA {
     this.answerTextInput.style.display = "none";
     this.answerWrapper.style.display = "block";
 
-    for (let i = 0; i < questionSample.answerList.length; i++) {
+    const answerListLength = questionSample.answerList.length
+    for (let i = 0; i < answerListLength; i++) {
       //show circle as much as answer
-      this.answerCheckList[i].style.display = "flex"
+      this.answerCheckList[i].style.display = "flex";
       //set attribute foreach circle
       this.answerCheckList[i].setAttribute("key", questionSample.answerList[i].key);
 
@@ -395,6 +399,9 @@ class ClockAndQA {
 
       this.answerCheckList[i].childNodes[1].innerHTML = questionSample.answerList[i].content;
     }
+    for(let i = answerListLength; i < this.answerCheckList.length; i++){
+      this.answerCheckList[i].style.display = "none";
+    } 
   }
 
   disableTextAnswer(){
@@ -412,10 +419,10 @@ class ClockAndQA {
 
     this.displayTime(this.timeLeftList[this.indexQuestion])
 
-    this.question.innerHTML = questionBundle[index].question
+    this.question.innerHTML = this.questionBundle[index].question
 
-    if (questionBundle[index].type === MULTIPLE_CHOICE_TYPE)
-      this.generateMultipleAnswer(questionBundle[index])
+    if (this.questionBundle[index].type === MULTIPLE_CHOICE_TYPE)
+      this.generateMultipleAnswer(this.questionBundle[index])
     else
       this.generateTextAnswer()
   }
@@ -464,6 +471,8 @@ class ClockAndQA {
   }
 
   setUpEvent() {
+    
+
     this.setUpAnswerArea();
 
     this.setVisibilityQA();
