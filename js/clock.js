@@ -1,12 +1,9 @@
 function createShuffledArray(array) {
 
   const len = array.length;
-  //console.log("len: ", len)
   const arrayResult = []
   for (let i = 0; i < len; i++)
     arrayResult.push(i)
-
-  //console.log("arrayResult before shuffle: ", arrayResult)
 
   for (let i = len - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
@@ -16,17 +13,12 @@ function createShuffledArray(array) {
     arrayResult[j] = tmp
   }
 
-  //console.log("arrayResult after shuffle: ", arrayResult)
-
-
   return arrayResult
 }
 
 const MULTIPLE_CHOICE_TYPE = 'multiple';
 const TEXT_TYPE = 'text';
 
-//const this.questionBundle = require("./this.questionBundle.json");
-//let this.questionBundle = require("./this.questionBundle.json");
 class ClockAndQA {
   constructor(params) {
     this.clockContainer = params.clockContainer;
@@ -235,8 +227,6 @@ class ClockAndQA {
       resultQuestion.appendChild(content);
 
       subResult.appendChild(resultQuestion);
-
-      console.log("sub result: ", subResult);
 
       this.resultContainer.appendChild(subResult);
     }
@@ -469,7 +459,6 @@ class ClockAndQA {
     this.answerTextInput.addEventListener("keyup", function (event) {
       if (event.keyCode === 13) {
         event.preventDefault();
-        console.log("inner html: ", this.value);
 
         $this.saveResult(this.value);
       }
