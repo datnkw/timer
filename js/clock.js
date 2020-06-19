@@ -169,7 +169,6 @@ class ClockAndQA {
       console.log("result: ", this.questionBundle[this.questionsOrder[i]].correctAnswer)
 
       if(this.questionBundle[this.questionsOrder[i]].type === TEXT_TYPE){
-        //if(this.resultList[i].includes)
         this.booleanResultList[i] = this.resultList[i];
         continue;
       }
@@ -207,7 +206,6 @@ class ClockAndQA {
     console.log("question: ", this.questionBundle[this.questionsOrder[i]].question);
 
     return stringContent;
-    // return this.questionBundle[this.questionsOrder[i]].question + " " + stringContent;
   }
 
   renderResult() {
@@ -456,20 +454,11 @@ class ClockAndQA {
     this.answerTextInput.addEventListener("keyup", function (event) {
       if (event.keyCode === 13) {
         event.preventDefault();
-        //this.switchCounting();
-        //this.isAnswerAlready = true;
-        // clearInterval($this.timer);
-
-        // this.stopCounting();
         console.log("inner html: ", this.value);
 
         $this.saveResult(this.value);
-
-        // $this.goToNextQuestion();
       }
     })
-
-    //this.answerTextInput = answerText;
 
     this.answer.appendChild(this.answerTextInput);
   }
