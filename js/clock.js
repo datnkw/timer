@@ -19,6 +19,93 @@ function createShuffledArray(array) {
 const MULTIPLE_CHOICE_TYPE = 'multiple';
 const TEXT_TYPE = 'text';
 
+questionBundle = [
+  {
+    type: MULTIPLE_CHOICE_TYPE,
+    question: `1 + 1 = ?`,
+    //for multiple choice
+    correctAnswer: `d`,
+    answerList: [{
+        key: `a`,
+        content: `10`,
+      },
+      {
+        key: `b`,
+        content: `1`,
+      },
+      {
+        key: `c`,
+        content: `3`,
+      },
+      {
+        key: `d`,
+        content: `2`,
+      },
+      {
+        key: `e`,
+        content: `20`,
+      },
+      {
+        key: `f`,
+        content: `21`,
+      },
+      {
+        key: `g`,
+        content: `22`,
+      }
+    ],
+    timeLimit: 2 // seconds,
+  },
+  {
+    type: MULTIPLE_CHOICE_TYPE,
+    question: `a + b = ?`,
+    //for multiple choice
+    correctAnswer: `a`,
+    answerList: [{
+        key: `a`,
+        content: `ab`,
+      },
+      {
+        key: `b`,
+        content: `ba`,
+      },
+      {
+        key: `c`,
+        content: `aa`,
+      }
+    ],
+    timeLimit: 2 // seconds
+  },
+  {
+    type: MULTIPLE_CHOICE_TYPE,
+    question: `a + b + c = ?`,
+    //for multiple choice
+    correctAnswer: `a`,
+    answerList: [{
+        key: `a`,
+        content: `abc`,
+      },
+      {
+        key: `b`,
+        content: `bac`,
+      },
+      {
+        key: `c`,
+        content: `aac`,
+      }
+    ],
+    timeLimit: 3 // seconds
+  },
+  {
+      type: `text`,
+      question: `Which mouse walks on two legs?`,
+      //for multiple choice
+      correctAnswer: `mickey`,
+      answerList: [],
+      timeLimit: 2 // seconds
+  }
+]
+
 class ClockAndQA {
   constructor(params) {
     this.clockContainer = params.clockContainer;
@@ -53,92 +140,7 @@ class ClockAndQA {
     this.setUpEvent();
   }
 
-  questionBundle = [
-    {
-      type: MULTIPLE_CHOICE_TYPE,
-      question: `1 + 1 = ?`,
-      //for multiple choice
-      correctAnswer: `d`,
-      answerList: [{
-          key: `a`,
-          content: `10`,
-        },
-        {
-          key: `b`,
-          content: `1`,
-        },
-        {
-          key: `c`,
-          content: `3`,
-        },
-        {
-          key: `d`,
-          content: `2`,
-        },
-        {
-          key: `e`,
-          content: `20`,
-        },
-        {
-          key: `f`,
-          content: `21`,
-        },
-        {
-          key: `g`,
-          content: `22`,
-        }
-      ],
-      timeLimit: 600 // seconds,
-    },
-    {
-      type: MULTIPLE_CHOICE_TYPE,
-      question: `a + b = ?`,
-      //for multiple choice
-      correctAnswer: `a`,
-      answerList: [{
-          key: `a`,
-          content: `ab`,
-        },
-        {
-          key: `b`,
-          content: `ba`,
-        },
-        {
-          key: `c`,
-          content: `aa`,
-        }
-      ],
-      timeLimit: 20 // seconds
-    },
-    {
-      type: MULTIPLE_CHOICE_TYPE,
-      question: `a + b + c = ?`,
-      //for multiple choice
-      correctAnswer: `a`,
-      answerList: [{
-          key: `a`,
-          content: `abc`,
-        },
-        {
-          key: `b`,
-          content: `bac`,
-        },
-        {
-          key: `c`,
-          content: `aac`,
-        }
-      ],
-      timeLimit: 70 // seconds
-    },
-    {
-        type: `text`,
-        question: `Which mouse walks on two legs?`,
-        //for multiple choice
-        correctAnswer: `mickey`,
-        answerList: [],
-        timeLimit: 70 // seconds
-    }
-  ]
+  
 
   startCounting() {
     this.isCounting = true;
@@ -149,6 +151,14 @@ class ClockAndQA {
 
   stopCounting(savedInterval) {
     this.isCounting = false;
+
+    console.log("current question: ", questionBundle[this.questionsOrder[this.indexQuestion]].type === TEXT_TYPE)
+    if(questionBundle[this.questionsOrder[this.indexQuestion]].type === TEXT_TYPE)
+      this.disableTextAnswer();
+
+    // if (this.checkTimeOut())
+    //   this.finishTest();
+
     return clearInterval(savedInterval);
   }
 
@@ -167,12 +177,12 @@ class ClockAndQA {
 
   checkResult() {
     for (let i = 0; i < this.questionsOrder.length; i++) {
-      if(this.questionBundle[this.questionsOrder[i]].type === TEXT_TYPE){
+      if(questionBundle[this.questionsOrder[i]].type === TEXT_TYPE){
         this.booleanResultList[i] = this.resultList[i];
         continue;
       }
 
-      if (this.resultList[i] === this.questionBundle[this.questionsOrder[i]].correctAnswer) {
+      if (this.resultList[i] === questionBundle[this.questionsOrder[i]].correctAnswer) {
         this.booleanResultList[i] = true;
       } else {
         this.booleanResultList[i] = false;
@@ -181,10 +191,10 @@ class ClockAndQA {
   }
 
   getContentNotNullAnswer() {
-    if(this.questionBundle[this.questionsOrder[i]].type === TEXT_TYPE){
+    if(questionBundle[this.questionsOrder[i]].type === TEXT_TYPE){
       return this.resultList[i];
     }else{
-     return this.questionBundle[this.questionsOrder[i]]
+     return questionBundle[this.questionsOrder[i]]
       .answerList.find(answer => answer.key === this.resultList[i]).content;
     }
   }
@@ -200,8 +210,7 @@ class ClockAndQA {
   renderResult() {
     this.resultContainer.innerHTML = "";
 
-
-    for (let i = 0; i < this.questionBundle.length; i++) {
+    for (let i = 0; i < questionBundle.length; i++) {
       const subResult = document.createElement("div");
       subResult.className += "sub-result";
 
@@ -212,7 +221,7 @@ class ClockAndQA {
 
       const resultQuestion = document.createElement("p");
 
-      let stringContent = this.questionBundle[this.questionsOrder[i]].question + " " + this.getContentAnswer(i)
+      let stringContent = questionBundle[this.questionsOrder[i]].question + " " + this.getContentAnswer(i)
       
 
       content = document.createTextNode(stringContent);
@@ -234,7 +243,7 @@ class ClockAndQA {
 
   finishTest() {
     this.isAnswerAlready = true;
-    this.isCounting = false;
+    // this.isCounting = false;
 
     this.stopCounting(this.timer);
     this.displayTime(0);
@@ -261,11 +270,21 @@ class ClockAndQA {
     let second = this.timeLeftList[this.indexQuestion];
 
     if (second === 0) {
+      //this.stopCounting(this.timer);
+      //this.disableTextAnswer();
+
       this.stopCounting(this.timer);
-      this.disableTextAnswer();
+
+      // if(questionBundle[this.questionsOrder[this.indexQuestion]].type === TEXT_TYPE)
+      //   this.disableTextAnswer();
 
       if (this.checkTimeOut())
         this.finishTest();
+
+      setTimeout(()=> {
+        this.goToNextQuestion(), 1000
+      })
+
       return
     }
 
@@ -303,8 +322,8 @@ class ClockAndQA {
   }
 
   resetTimer() {
-    this.stopCounting(this.timer);
-    if (!this.isCounting) {
+    // this.stopCounting(this.timer);
+    if (!this.isCounting && this.timeLeftList[this.indexQuestion] != 0) {
       this.timer = this.startCounting();
     }
   }
@@ -315,30 +334,24 @@ class ClockAndQA {
     })
   }
 
-  resetIsCounting() {
-    this.isCounting = (this.timeLeftList[this.indexQuestion] === 0);
-  }
+  // resetIsCounting() {
+  //   console.log("indexQuestion: ", this.indexQuestion);
+  //   console.log("timeLeftList: ", this.timeLeftList)
+
+  //   this.isCounting = !(this.timeLeftList[this.indexQuestion] === 0);
+  //   console.log("isCounting: ", this.isCounting);
+  // }
 
   setUpPanelQuestion() {
-    this.currentQuestion.childNodes[3].innerHTML = (this.indexQuestion + 1) + "/" + this.questionBundle.length;
-  }
-
-  setUpQuestion() {
-    this.resetSelectAnswer(this.answerCheckList);
-
-    this.resetIsCounting();
-
-    this.resetTimer();
-
-    this.generateQuestion(this.questionBundle, this.questionsOrder[this.indexQuestion]);
+    this.currentQuestion.childNodes[3].innerHTML = (this.indexQuestion + 1) + "/" + questionBundle.length;
   }
 
   goToNextQuestion() {
-    if (this.indexQuestion + 1 >= this.questionBundle.length) {
+    if (this.indexQuestion + 1 >= questionBundle.length) {
       return;
     }
     this.indexQuestion++;
-    this.setUpQuestion();
+    this.generateQuestion(questionBundle, this.questionsOrder[this.indexQuestion]);
   }
 
   goToPreQuestion() {
@@ -347,10 +360,12 @@ class ClockAndQA {
 
     this.indexQuestion--;
 
-    this.setUpQuestion();
+    this.generateQuestion(questionBundle, this.questionsOrder[this.indexQuestion]);
   }
 
   handleClickAnswer(answerItem) {
+    console.log("is couting click: ", this.isCounting);
+
     if (!this.isCounting) {
       return
     }
@@ -396,17 +411,27 @@ class ClockAndQA {
     this.answerWrapper.style.display = "none";
     this.answerTextInput.style.display = "block";
     this.answerTextInput.value = this.resultList[this.indexQuestion] || '';
+
+    // if(!this.isCounting){
+    //   this.disableTextAnswer();
+    // }
   }
 
   generateQuestion(questionBundle, index) {
     this.setUpPanelQuestion();
 
+    this.resetSelectAnswer(this.answerCheckList);
+
+    // this.resetIsCounting();
+
+    this.resetTimer();
+
     this.displayTime(this.timeLeftList[this.indexQuestion])
 
-    this.question.innerHTML = this.questionBundle[index].question
+    this.question.innerHTML = questionBundle[index].question
 
-    if (this.questionBundle[index].type === MULTIPLE_CHOICE_TYPE)
-      this.generateMultipleAnswer(this.questionBundle[index])
+    if (questionBundle[index].type === MULTIPLE_CHOICE_TYPE)
+      this.generateMultipleAnswer(questionBundle[index])
     else
       this.generateTextAnswer()
   }
@@ -414,9 +439,9 @@ class ClockAndQA {
   getTheBiggestAmountAnswers() {
     let max = 0;
 
-    for(let i = 0; i < this.questionBundle.length; i++){
-      if(max < this.questionBundle[i].answerList.length)
-        max = this.questionBundle[i].answerList.length;
+    for(let i = 0; i < questionBundle.length; i++){
+      if(max < questionBundle[i].answerList.length)
+        max = questionBundle[i].answerList.length;
     }
 
     return max;
@@ -450,7 +475,6 @@ class ClockAndQA {
       this.answerCheckList.push(answerItem);
     }
     
-
     this.answer.appendChild(this.answerWrapper)
 
     this.answerTextInput = document.createElement("INPUT");
@@ -459,7 +483,6 @@ class ClockAndQA {
     this.answerTextInput.addEventListener("keyup", function (event) {
       if (event.keyCode === 13) {
         event.preventDefault();
-
         $this.saveResult(this.value);
       }
     })
@@ -468,25 +491,23 @@ class ClockAndQA {
   }
 
   setUpEvent() {
-    
-
     this.setUpAnswerArea();
 
     this.setVisibilityQA();
 
-    this.questionsOrder = createShuffledArray(this.questionBundle)
+    this.questionsOrder = createShuffledArray(questionBundle)
 
     for (let i = 0; i < this.questionsOrder.length; i++) {
-      this.timeLeftList[i] = this.questionBundle[this.questionsOrder[i]].timeLimit
+      this.timeLeftList[i] = questionBundle[this.questionsOrder[i]].timeLimit
     }
 
     this.clockContainer.addEventListener('click', () => {
 
       if (!this.isCounting && !this.isAnswerAlready) {
-        this.switchCounting();
+        // this.switchCounting();
         this.timer = this.startCounting();
         this.setVisibilityQA();
-        this.generateQuestion(this.questionBundle, this.questionsOrder[this.indexQuestion])
+        this.generateQuestion(questionBundle, this.questionsOrder[this.indexQuestion])
       }
     })
 
@@ -502,6 +523,4 @@ class ClockAndQA {
       this.finishTest();
     })
   }
-
-
 }
