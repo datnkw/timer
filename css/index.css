@@ -3,12 +3,10 @@
 @import 'result.css';
 
 #wrapper {
-
   width: 100%;
 }
 
 #wrapper div {
   margin: 0 auto;
-
   width: fit-content;
 }

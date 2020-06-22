@@ -1,16 +1,9 @@
 #clock {
   padding: 50px;
-
   border-radius: 10px;
-
-  /* border: 2px solid #FF0000; */
-
   color: #FF0000;
-
   display: flex;
-
   cursor: pointer;
-
   position: relative;
 }
 
@@ -26,8 +19,6 @@
 
 #answer input {
   font-size: 40px;
-
-  /* margin-top: 30px; */
 }
 
 #answer ul {
@@ -36,12 +27,7 @@
 
 #answer li {
   margin: 10px;
-
-  /* justify-content: center; */
-
   align-items: center;
-
-  /* /display: flex; */
 }
 
 #answer li i {
@@ -53,14 +39,10 @@
   position: absolute;
   right: 550px;
   top: 170px;
-
   width: 200px !important;
   height: 50px;
-
   cursor: pointer;
-
   overflow: hidden;
-
   transition: all 0.3s ease-in;
 }
 
@@ -71,7 +53,6 @@
 .btn-wrapper.pre {
   left: 550px;
   right: auto;
-  /* transition: all 0.3s ease-in; */
 }
 
 .btn-wrapper.pre:hover {
@@ -81,14 +62,11 @@
 .btn {
   width: 150px !important;
   height: 50px;
-  /* background-color: #d9c9ba; */
   background-color: #f4511e;
   display: flex;
   justify-content: center;
   align-items: center;
-
   color: #fff;
-  /* font-weight: bold; */
 }
 
 .btn #btn-pre {
@@ -98,32 +76,23 @@
 
 #btn-pre::before {
   content: "";
-
   width: 40px !important;
   height: 40px;
   z-index: -1;
-
-  /* background-color: #d9c9ba; */
   background-color: #f4511e;
-
   position: absolute;
   left: 10px;
-
   transform: rotate(45deg);
 }
 
 #btn-next::before {
   content: "";
-
   width: 40px !important;
   height: 40px;
   z-index: -1;
-
   background-color: #f4511e;
-
   position: absolute;
   right: 10px;
-
   transform: rotate(45deg);
 }
 
@@ -131,9 +100,7 @@
   position: absolute;
   top: 50px;
   right: 400px;
-
   font-size: 30px;
-
   display: flex;
 }
 

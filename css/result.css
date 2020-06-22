@@ -44,9 +44,6 @@
 
 #submit-btn span::after{
   content: '\00bb';
-  font-size: 30px;
-  /* margin: auto; */
-  /* margin-bottom: -10px; */
   padding: 0px !important;
 
   
