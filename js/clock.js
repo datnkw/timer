@@ -19,8 +19,7 @@ function createShuffledArray(array) {
 const MULTIPLE_CHOICE_TYPE = 'multiple';
 const TEXT_TYPE = 'text';
 
-questionBundle = [
-  {
+questionBundle = [{
     type: MULTIPLE_CHOICE_TYPE,
     question: `1 + 1 = ?`,
     //for multiple choice
@@ -54,7 +53,7 @@ questionBundle = [
         content: `22`,
       }
     ],
-    timeLimit: 2 // seconds,
+    timeLimit: 20 // seconds,
   },
   {
     type: MULTIPLE_CHOICE_TYPE,
@@ -74,7 +73,7 @@ questionBundle = [
         content: `aa`,
       }
     ],
-    timeLimit: 2 // seconds
+    timeLimit: 20 // seconds
   },
   {
     type: MULTIPLE_CHOICE_TYPE,
@@ -97,12 +96,12 @@ questionBundle = [
     timeLimit: 3 // seconds
   },
   {
-      type: `text`,
-      question: `Which mouse walks on two legs?`,
-      //for multiple choice
-      correctAnswer: `mickey`,
-      answerList: [],
-      timeLimit: 2 // seconds
+    type: `text`,
+    question: `Which mouse walks on two legs?`,
+    //for multiple choice
+    correctAnswer: `mickey`,
+    answerList: [],
+    timeLimit: 200 // seconds
   }
 ]
 
@@ -140,7 +139,7 @@ class ClockAndQA {
     this.setUpEvent();
   }
 
-  
+
 
   startCounting() {
     this.isCounting = true;
@@ -152,12 +151,8 @@ class ClockAndQA {
   stopCounting(savedInterval) {
     this.isCounting = false;
 
-    console.log("current question: ", questionBundle[this.questionsOrder[this.indexQuestion]].type === TEXT_TYPE)
-    if(questionBundle[this.questionsOrder[this.indexQuestion]].type === TEXT_TYPE)
+    if (questionBundle[this.questionsOrder[this.indexQuestion]].type === TEXT_TYPE)
       this.disableTextAnswer();
-
-    // if (this.checkTimeOut())
-    //   this.finishTest();
 
     return clearInterval(savedInterval);
   }
@@ -177,7 +172,7 @@ class ClockAndQA {
 
   checkResult() {
     for (let i = 0; i < this.questionsOrder.length; i++) {
-      if(questionBundle[this.questionsOrder[i]].type === TEXT_TYPE){
+      if (questionBundle[this.questionsOrder[i]].type === TEXT_TYPE) {
         this.booleanResultList[i] = this.resultList[i];
         continue;
       }
@@ -191,19 +186,19 @@ class ClockAndQA {
   }
 
   getContentNotNullAnswer() {
-    if(questionBundle[this.questionsOrder[i]].type === TEXT_TYPE){
+    if (questionBundle[this.questionsOrder[i]].type === TEXT_TYPE) {
       return this.resultList[i];
-    }else{
-     return questionBundle[this.questionsOrder[i]]
-      .answerList.find(answer => answer.key === this.resultList[i]).content;
+    } else {
+      return questionBundle[this.questionsOrder[i]]
+        .answerList.find(answer => answer.key === this.resultList[i]).content;
     }
   }
 
-  getContentAnswer(i){
-    if(!this.resultList[i]){
+  getContentAnswer(i) {
+    if (!this.resultList[i]) {
       return 'No answer';
     }
-    
+
     return getContentNotNullAnswer();
   }
 
@@ -222,15 +217,15 @@ class ClockAndQA {
       const resultQuestion = document.createElement("p");
 
       let stringContent = questionBundle[this.questionsOrder[i]].question + " " + this.getContentAnswer(i)
-      
+
 
       content = document.createTextNode(stringContent);
       if (this.booleanResultList[i] == true) {
         resultQuestion.className += "answer correct";
-      } else if(this.booleanResultList[i] == false){
+      } else if (this.booleanResultList[i] == false) {
         resultQuestion.className += "answer wrong";
-      }else {
-        resultQuestion.className +=  "answer";
+      } else {
+        resultQuestion.className += "answer";
       }
 
       resultQuestion.appendChild(content);
@@ -243,7 +238,6 @@ class ClockAndQA {
 
   finishTest() {
     this.isAnswerAlready = true;
-    // this.isCounting = false;
 
     this.stopCounting(this.timer);
     this.displayTime(0);
@@ -270,18 +264,12 @@ class ClockAndQA {
     let second = this.timeLeftList[this.indexQuestion];
 
     if (second === 0) {
-      //this.stopCounting(this.timer);
-      //this.disableTextAnswer();
-
       this.stopCounting(this.timer);
-
-      // if(questionBundle[this.questionsOrder[this.indexQuestion]].type === TEXT_TYPE)
-      //   this.disableTextAnswer();
 
       if (this.checkTimeOut())
         this.finishTest();
 
-      setTimeout(()=> {
+      setTimeout(() => {
         this.goToNextQuestion(), 1000
       })
 
@@ -295,12 +283,17 @@ class ClockAndQA {
 
   setVisibilityQA() {
     if (!this.isCounting) {
-      this.question.style.display = "none";
-      this.answer.style.display = "none";
-      this.btnNext.style.display = "none";
-      this.btnPre.style.display = "none";
-      this.currentQuestion.style.display = "none";
-      this.btnSubmit.style.display = "none";
+      ['question',
+        'answer',
+        'btnNext',
+        'btnPre',
+        'currentQuestion',
+        'btnSubmit'
+      ].forEach(
+        (attribute) => {
+          return this[attribute].style.display = 'none';
+        }
+      );
     } else {
       this.question.style.display = "block";
       this.answer.style.display = "block";
@@ -322,7 +315,6 @@ class ClockAndQA {
   }
 
   resetTimer() {
-    // this.stopCounting(this.timer);
     if (!this.isCounting && this.timeLeftList[this.indexQuestion] != 0) {
       this.timer = this.startCounting();
     }
@@ -333,14 +325,6 @@ class ClockAndQA {
       element.childNodes[0].className = "far fa-circle"
     })
   }
-
-  // resetIsCounting() {
-  //   console.log("indexQuestion: ", this.indexQuestion);
-  //   console.log("timeLeftList: ", this.timeLeftList)
-
-  //   this.isCounting = !(this.timeLeftList[this.indexQuestion] === 0);
-  //   console.log("isCounting: ", this.isCounting);
-  // }
 
   setUpPanelQuestion() {
     this.currentQuestion.childNodes[3].innerHTML = (this.indexQuestion + 1) + "/" + questionBundle.length;
@@ -364,8 +348,6 @@ class ClockAndQA {
   }
 
   handleClickAnswer(answerItem) {
-    console.log("is couting click: ", this.isCounting);
-
     if (!this.isCounting) {
       return
     }
@@ -388,9 +370,8 @@ class ClockAndQA {
 
     const answerListLength = questionSample.answerList.length
     for (let i = 0; i < answerListLength; i++) {
-      //show circle as much as answer
       this.answerCheckList[i].style.display = "flex";
-      //set attribute foreach circle
+
       this.answerCheckList[i].setAttribute("key", questionSample.answerList[i].key);
 
       if (questionSample.answerList[i].key === this.resultList[this.indexQuestion])
@@ -398,12 +379,12 @@ class ClockAndQA {
 
       this.answerCheckList[i].childNodes[1].innerHTML = questionSample.answerList[i].content;
     }
-    for(let i = answerListLength; i < this.answerCheckList.length; i++){
+    for (let i = answerListLength; i < this.answerCheckList.length; i++) {
       this.answerCheckList[i].style.display = "none";
-    } 
+    }
   }
 
-  disableTextAnswer(){
+  disableTextAnswer() {
     this.answerTextInput.disabled = true;
   }
 
@@ -411,18 +392,12 @@ class ClockAndQA {
     this.answerWrapper.style.display = "none";
     this.answerTextInput.style.display = "block";
     this.answerTextInput.value = this.resultList[this.indexQuestion] || '';
-
-    // if(!this.isCounting){
-    //   this.disableTextAnswer();
-    // }
   }
 
   generateQuestion(questionBundle, index) {
     this.setUpPanelQuestion();
 
     this.resetSelectAnswer(this.answerCheckList);
-
-    // this.resetIsCounting();
 
     this.resetTimer();
 
@@ -439,8 +414,8 @@ class ClockAndQA {
   getTheBiggestAmountAnswers() {
     let max = 0;
 
-    for(let i = 0; i < questionBundle.length; i++){
-      if(max < questionBundle[i].answerList.length)
+    for (let i = 0; i < questionBundle.length; i++) {
+      if (max < questionBundle[i].answerList.length)
         max = questionBundle[i].answerList.length;
     }
 
@@ -474,7 +449,7 @@ class ClockAndQA {
 
       this.answerCheckList.push(answerItem);
     }
-    
+
     this.answer.appendChild(this.answerWrapper)
 
     this.answerTextInput = document.createElement("INPUT");
@@ -504,7 +479,6 @@ class ClockAndQA {
     this.clockContainer.addEventListener('click', () => {
 
       if (!this.isCounting && !this.isAnswerAlready) {
-        // this.switchCounting();
         this.timer = this.startCounting();
         this.setVisibilityQA();
         this.generateQuestion(questionBundle, this.questionsOrder[this.indexQuestion])
