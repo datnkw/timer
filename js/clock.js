@@ -26,6 +26,80 @@ const MULTIPLE_CHOICE_TYPE = 'multiple';
 const TEXT_TYPE = 'text';
 const NUMBER_CHECK_ITEM = 4;
 
+questionBundleSample = [{
+    type: MULTIPLE_CHOICE_TYPE,
+    question: `1 + 1 = ?`,
+    //for multiple choice
+    correctAnswer: `d`,
+    answerList: [{
+        key: `a`,
+        content: `10`,
+      },
+      {
+        key: `b`,
+        content: `1`,
+      },
+      {
+        key: `c`,
+        content: `3`,
+      },
+      {
+        key: `d`,
+        content: `2`,
+      }
+    ],
+    timeLimit: 300 // seconds,
+  },
+  {
+    type: MULTIPLE_CHOICE_TYPE,
+    question: `a + b = ?`,
+    //for multiple choice
+    correctAnswer: `a`,
+    answerList: [{
+        key: `a`,
+        content: `ab`,
+      },
+      {
+        key: `b`,
+        content: `ba`,
+      },
+      {
+        key: `c`,
+        content: `aa`,
+      }
+    ],
+    timeLimit: 200 // seconds
+  },
+  {
+    type: MULTIPLE_CHOICE_TYPE,
+    question: `a + b + c = ?`,
+    //for multiple choice
+    correctAnswer: `a`,
+    answerList: [{
+        key: `a`,
+        content: `abc`,
+      },
+      {
+        key: `b`,
+        content: `bac`,
+      },
+      {
+        key: `c`,
+        content: `aac`,
+      }
+    ],
+    timeLimit: 200 // seconds
+  },
+  {
+    type: `text`,
+    question: `Which mouse walks on two legs?`,
+    //for multiple choice
+    correctAnswer: `mickey`,
+    answerList: [],
+    timeLimit: 300 // seconds
+  }
+]
+
 //const this.questionBundle = require("./this.questionBundle.json");
 //let this.questionBundle = require("./this.questionBundle.json");
 class ClockAndQA {
@@ -173,7 +247,7 @@ class ClockAndQA {
       console.log("answer: ", this.resultList[i]);
       console.log("result: ", this.questionBundle[this.questionsOrder[i]].correctAnswer)
 
-      if(this.questionBundle[this.questionsOrder[i]].type === TEXT_TYPE){
+      if (this.questionBundle[this.questionsOrder[i]].type === TEXT_TYPE) {
         this.booleanResultList[i] = this.resultList[i];
         continue;
       }
@@ -188,24 +262,24 @@ class ClockAndQA {
     console.log("boolean result: ", this.booleanResultList)
   }
 
-  getContentAnswer(i){
+  getContentAnswer(i) {
     let stringContent = '';
 
-    if(!this.resultList[i]){
+    if (!this.resultList[i]) {
       return 'No answer';
     }
 
     console.log(this.questionBundle[this.questionsOrder[i]].type);
 
-    if(this.questionBundle[this.questionsOrder[i]].type === TEXT_TYPE){
+    if (this.questionBundle[this.questionsOrder[i]].type === TEXT_TYPE) {
       console.log("text result");
       console.log("this result list: ", this.resultList)
       console.log("this i: ", i)
       console.log("this answer: ", this.resultList[i]);
       stringContent = this.resultList[i];
-    }else{
-     stringContent = this.questionBundle[this.questionsOrder[i]]
-      .answerList.find(answer => answer.key === this.resultList[i]).content;
+    } else {
+      stringContent = this.questionBundle[this.questionsOrder[i]]
+        .answerList.find(answer => answer.key === this.resultList[i]).content;
     }
     console.log("stringContent: ", stringContent);
     console.log("question: ", this.questionBundle[this.questionsOrder[i]].question);
@@ -229,15 +303,15 @@ class ClockAndQA {
       const resultQuestion = document.createElement("p");
 
       let stringContent = this.questionBundle[this.questionsOrder[i]].question + " " + this.getContentAnswer(i)
-      
+
 
       content = document.createTextNode(stringContent);
       if (this.booleanResultList[i] == true) {
         resultQuestion.className += "answer correct";
-      } else if(this.booleanResultList[i] == false){
+      } else if (this.booleanResultList[i] == false) {
         resultQuestion.className += "answer wrong";
-      }else {
-        resultQuestion.className +=  "answer";
+      } else {
+        resultQuestion.className += "answer";
       }
 
       resultQuestion.appendChild(content);
@@ -403,12 +477,12 @@ class ClockAndQA {
 
       this.answerCheckList[i].childNodes[1].innerHTML = questionSample.answerList[i].content;
     }
-    for(let i = answerListLength; i < this.answerCheckList.length; i++){
+    for (let i = answerListLength; i < this.answerCheckList.length; i++) {
       this.answerCheckList[i].style.display = "none";
-    } 
+    }
   }
 
-  disableTextAnswer(){
+  disableTextAnswer() {
     this.answerTextInput.disabled = true;
   }
 
@@ -475,7 +549,11 @@ class ClockAndQA {
   }
 
   setUpQuestionBundle() {
-    this.questionBundle = JSON.parse(this.questionInput.childNodes[3].value);
+    try {
+      this.questionBundle = JSON.parse(this.questionInput.childNodes[3].value)
+    } catch {
+      this.questionBundle = questionBundleSample;
+    }
     this.questionsOrder = createShuffledArray(this.questionBundle)
 
     for (let i = 0; i < this.questionsOrder.length; i++) {
@@ -486,22 +564,22 @@ class ClockAndQA {
   }
 
   setUpEvent() {
-    
+
     //this.questionBundle = JSON.parse(this.questionInput.childNodes[3])
 
-    
+
 
     this.setVisibilityQA();
 
-    
+
 
     this.clockContainer.addEventListener('click', () => {
 
       if (!this.isCounting && !this.isAnswerAlready) {
-    //     console.log("textarea: ");
-    // console.log(this.questionInput.childNodes[3].value);
-    this.setUpQuestionBundle();
-    
+        //     console.log("textarea: ");
+        // console.log(this.questionInput.childNodes[3].value);
+        this.setUpQuestionBundle();
+
         this.switchCounting();
         this.timer = this.startCounting();
         this.setVisibilityQA();

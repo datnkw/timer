@@ -20,7 +20,7 @@
           "content": "2"
         }
       ],
-      "timeLimit": 30
+      "timeLimit": 3
     },
     {
       "type": "multiple",
@@ -39,7 +39,7 @@
           "content": "aa"
         }
       ],
-      "timeLimit": 60
+      "timeLimit": 2
     },
     {
       "type": "multiple",
@@ -58,7 +58,7 @@
           "content": "aac"
         }
       ],
-      "timeLimit": 120
+      "timeLimit": 3
     },
     {
         "type": "text",
@@ -66,6 +66,6 @@
         
         "correctAnswer": "mickey",
         "answerList": [],
-        "timeLimit": 60
+        "timeLimit": 2
     }
   ]

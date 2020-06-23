@@ -153,3 +153,7 @@
 #add-question textarea {
   margin-top: 8px;
 }
+
+#input-question {
+  border: 1px solid;
+}
