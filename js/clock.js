@@ -80,7 +80,8 @@ questionBundle = [{
     question: `a + b + c = ?`,
     //for multiple choice
     correctAnswer: `a`,
-    answerList: [{
+    answerList: [
+      {
         key: `a`,
         content: `abc`,
       },
@@ -91,7 +92,139 @@ questionBundle = [{
       {
         key: `c`,
         content: `aac`,
-      }
+      },{
+        key: `a`,
+        content: `abc`,
+      },
+      {
+        key: `b`,
+        content: `bac`,
+      },
+      {
+        key: `c`,
+        content: `aac`,
+      },{
+        key: `a`,
+        content: `abc`,
+      },
+      {
+        key: `b`,
+        content: `bac`,
+      },
+      {
+        key: `c`,
+        content: `aac`,
+      },{
+        key: `a`,
+        content: `abc`,
+      },
+      {
+        key: `b`,
+        content: `bac`,
+      },
+      {
+        key: `c`,
+        content: `aac`,
+      },{
+        key: `a`,
+        content: `abc`,
+      },
+      {
+        key: `b`,
+        content: `bac`,
+      },
+      {
+        key: `c`,
+        content: `aac`,
+      },{
+        key: `a`,
+        content: `abc`,
+      },
+      {
+        key: `b`,
+        content: `bac`,
+      },
+      {
+        key: `c`,
+        content: `aac`,
+      },{
+        key: `a`,
+        content: `abc`,
+      },
+      {
+        key: `b`,
+        content: `bac`,
+      },
+      {
+        key: `c`,
+        content: `aac`,
+      },{
+        key: `a`,
+        content: `abc`,
+      },
+      {
+        key: `b`,
+        content: `bac`,
+      },
+      {
+        key: `c`,
+        content: `aac`,
+      },{
+        key: `a`,
+        content: `abc`,
+      },
+      {
+        key: `b`,
+        content: `bac`,
+      },
+      {
+        key: `c`,
+        content: `aac`,
+      },{
+        key: `a`,
+        content: `abc`,
+      },
+      {
+        key: `b`,
+        content: `bac`,
+      },
+      {
+        key: `c`,
+        content: `aac`,
+      },{
+        key: `a`,
+        content: `abc`,
+      },
+      {
+        key: `b`,
+        content: `bac`,
+      },
+      {
+        key: `c`,
+        content: `aac`,
+      },{
+        key: `a`,
+        content: `abc`,
+      },
+      {
+        key: `b`,
+        content: `bac`,
+      },
+      {
+        key: `c`,
+        content: `aac`,
+      },{
+        key: `a`,
+        content: `abc`,
+      },
+      {
+        key: `b`,
+        content: `bac`,
+      },
+      {
+        key: `c`,
+        content: `aac`,
+      },
     ],
     timeLimit: 3 // seconds
   },
@@ -138,8 +271,6 @@ class ClockAndQA {
 
     this.setUpEvent();
   }
-
-
 
   startCounting() {
     this.isCounting = true;
@@ -401,7 +532,13 @@ class ClockAndQA {
 
     this.resetTimer();
 
-    this.displayTime(this.timeLeftList[this.indexQuestion])
+    const currentTimeLeft = this.timeLeftList[this.indexQuestion];
+
+    if(!currentTimeLeft){
+      this.isCounting = false;
+    }
+
+    this.displayTime(currentTimeLeft)
 
     this.question.innerHTML = questionBundle[index].question
 
