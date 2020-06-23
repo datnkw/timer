@@ -30,6 +30,11 @@
 
     </div>
 
+    <div id="add-question">
+      <p>Add your question bundle here, or we will use our default bundle.</p>
+      <textarea id="input-question" cols="60" rows="5"></textarea>
+    </div>
+
     <div class="btn-wrapper">
       <div id="btn-next" class="btn"><span>Next question</span></div>
     </div>
@@ -67,7 +72,8 @@
       btnPre: document.getElementById("btn-pre"),
       currentQuestion: document.getElementById("current-question"),
       resultContainer: document.getElementById("result"),
-      btnSubmit: document.getElementById("submit-btn")
+      btnSubmit: document.getElementById("submit-btn"),
+      questionInput: document.querySelector("#add-question")
     })
   </script>
 </body>

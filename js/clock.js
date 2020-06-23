@@ -19,6 +19,7 @@ function createShuffledArray(array) {
 const MULTIPLE_CHOICE_TYPE = 'multiple';
 const TEXT_TYPE = 'text';
 
+
 questionBundle = [{
     type: MULTIPLE_CHOICE_TYPE,
     question: `1 + 1 = ?`,
@@ -54,6 +55,7 @@ questionBundle = [{
       }
     ],
     timeLimit: 20 // seconds,
+
   },
   {
     type: MULTIPLE_CHOICE_TYPE,
@@ -74,6 +76,7 @@ questionBundle = [{
       }
     ],
     timeLimit: 20 // seconds
+
   },
   {
     type: MULTIPLE_CHOICE_TYPE,
@@ -227,6 +230,7 @@ questionBundle = [{
       },
     ],
     timeLimit: 3 // seconds
+
   },
   {
     type: `text`,
@@ -234,6 +238,7 @@ questionBundle = [{
     //for multiple choice
     correctAnswer: `mickey`,
     answerList: [],
+
     timeLimit: 200 // seconds
   }
 ]
@@ -255,6 +260,8 @@ class ClockAndQA {
     this.resultContainer = params.resultContainer;
 
     this.btnSubmit = params.btnSubmit;
+
+    this.questionInput = params.questionInput;
 
     this.valueMinute = 0;
     this.valueSecond = 0;
@@ -303,7 +310,9 @@ class ClockAndQA {
 
   checkResult() {
     for (let i = 0; i < this.questionsOrder.length; i++) {
+
       if (questionBundle[this.questionsOrder[i]].type === TEXT_TYPE) {
+
         this.booleanResultList[i] = this.resultList[i];
         continue;
       }
@@ -347,8 +356,8 @@ class ClockAndQA {
 
       const resultQuestion = document.createElement("p");
 
-      let stringContent = questionBundle[this.questionsOrder[i]].question + " " + this.getContentAnswer(i)
 
+      let stringContent = questionBundle[this.questionsOrder[i]].question + " " + this.getContentAnswer(i)
 
       content = document.createTextNode(stringContent);
       if (this.booleanResultList[i] == true) {
@@ -400,9 +409,9 @@ class ClockAndQA {
       if (this.checkTimeOut())
         this.finishTest();
 
-      setTimeout(() => {
-        this.goToNextQuestion(), 1000
-      })
+      // setTimeout(() => {
+      //   this.goToNextQuestion(), 1000
+      // })
 
       return
     }
@@ -432,6 +441,8 @@ class ClockAndQA {
       this.btnPre.style.display = "flex";
       this.currentQuestion.style.display = "flex";
       this.btnSubmit.style.display = "block";
+
+      this.questionInput.style.display = "none";
     }
   }
 
@@ -602,10 +613,20 @@ class ClockAndQA {
     this.answer.appendChild(this.answerTextInput);
   }
 
-  setUpEvent() {
-    this.setUpAnswerArea();
 
-    this.setVisibilityQA();
+  //setUpEvent() {
+
+  setUpQuestionBundle() {
+    // try {
+    //   questionBundle = JSON.parse(this.questionInput.childNodes[3].value)
+    // } catch {
+    //   questionBundle = questionBundleSample;
+    // }
+
+    const valueInputQuestion = this.questionInput.childNodes[3].value;
+    if(valueInputQuestion){
+      questionBundle = JSON.parse(valueInputQuestion);
+    }
 
     this.questionsOrder = createShuffledArray(questionBundle)
 
@@ -613,9 +634,26 @@ class ClockAndQA {
       this.timeLeftList[i] = questionBundle[this.questionsOrder[i]].timeLimit
     }
 
+
+    this.setUpAnswerArea();
+  }
+
+  setUpEvent() {
+    this.setVisibilityQA();
+
+    //this.questionsOrder = createShuffledArray(questionBundle)
+
+    // for (let i = 0; i < this.questionsOrder.length; i++) {
+    //   this.timeLeftList[i] = questionBundle[this.questionsOrder[i]].timeLimit
+    // }
+
     this.clockContainer.addEventListener('click', () => {
 
       if (!this.isCounting && !this.isAnswerAlready) {
+
+        this.setUpQuestionBundle();
+
+        this.switchCounting();
         this.timer = this.startCounting();
         this.setVisibilityQA();
         this.generateQuestion(questionBundle, this.questionsOrder[this.indexQuestion])
